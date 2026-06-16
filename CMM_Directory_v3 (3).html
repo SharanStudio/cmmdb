@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Medicine Malayalis Database</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tabler-icons@latest/tabler-icons.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary-green: #1b5e20;
+  --light-green: #2e7d32;
+  --yellow: #ffc107;
+  --white: #ffffff;
+  --gray-light: #f5f5f5;
+  --text-dark: #1a1a1a;
+  --text-light: #555;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --white: #f5f5f5;
+    --gray-light: #e8e8e8;
+    --text-dark: #1a1a1a;
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #f0f9f5 0%, #e8f5e9 100%);
+  color: var(--text-dark);
+  padding: 20px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+header {
+  flex: 1;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--primary-green);
+}
+
+header p {
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.settings-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+  border: 2px solid var(--yellow);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
+  font-weight: bold;
+}
+
+.settings-btn:hover {
+  transform: rotate(20deg) scale(1.1);
+  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4);
+}
+
+.detail-btn {
+  background: none;
+  border: none;
+  color: var(--yellow);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+  transition: all 0.3s;
+}
+
+.detail-btn:hover {
+  color: var(--primary-green);
+  transform: scale(1.3);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s;
+}
+
+.modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  border-left: 6px solid var(--yellow);
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--yellow);
+  padding-bottom: 1rem;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  color: var(--primary-green);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--primary-green);
+  transition: all 0.3s;
+}
+
+.modal-close:hover {
+  transform: rotate(90deg);
+}
+
+.status-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--gray-light);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-green);
+}
+
+.status-item:last-child {
+  margin-bottom: 0;
+}
+
+.status-icon {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.status-info h3 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary-green);
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.status-info p {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffa500;
+  animation: pulse 2s infinite;
+  margin-right: 6px;
+}
+
+.status-indicator.connected {
+  background: #4CAF50;
+  animation: none;
+}
+
+.status-indicator.error {
+  background: #f44336;
+  animation: none;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.search-section {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.1);
+  margin-bottom: 2rem;
+  border-top: 4px solid var(--yellow);
+}
+
+.search-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-green);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .search-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary-green);
+  display: block;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+input[type="text"], select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--primary-green);
+  border-radius: 8px;
+  font-size: 14px;
+  background: var(--white);
+  color: var(--text-dark);
+  transition: all 0.3s;
+}
+
+input[type="text"]:focus, select:focus {
+  outline: none;
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.2);
+  background: #fffef5;
+}
+
+input[type="text"]::placeholder {
+  color: var(--text-light);
+}
+
+.view-toggle {
+  position: fixed;
+  right: 20px;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+}
+
+.view-btn {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: 2px solid var(--primary-green);
+  background: var(--white);
+  color: var(--primary-green);
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 20px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  text-transform: none;
+  letter-spacing: 0;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.2);
+}
+
+.view-btn.active {
+  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+  color: var(--white);
+  border-color: var(--yellow);
+  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4);
+  transform: scale(1.15);
+}
+
+.view-btn:hover:not(.active) {
+  border-color: var(--yellow);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .view-toggle {
+    position: static;
+    flex-direction: row;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--gray-light);
+    border-radius: 8px;
+    border: 2px solid var(--primary-green);
+    right: auto;
+    top: auto;
+  }
+  
+  .view-btn {
+    flex: 1;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    border-radius: 6px;
+  }
+}
+
+.stats {
+  font-size: 14px;
+  color: var(--primary-green);
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(27, 94, 32, 0.05), rgba(255, 193, 7, 0.05));
+  border-left: 4px solid var(--yellow);
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.directory-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background: var(--white);
+  border: 2px solid var(--primary-green);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.1);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--light-green), var(--yellow));
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3);
+  border-color: var(--yellow);
+}
+
+.card-header {
+  margin-bottom: 1rem;
+}
+
+.card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-green);
+  margin-bottom: 0.5rem;
+}
+
+.card-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.card-status.completed {
+  background: rgba(46, 125, 50, 0.2);
+  color: var(--light-green);
+  border: 1px solid var(--light-green);
+}
+
+.card-status.ongoing {
+  background: rgba(255, 193, 7, 0.2);
+  color: #cc9a00;
+  border: 1px solid #cc9a00;
+}
+
+.card-body {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 13px;
+}
+
+.card-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.card-icon {
+  color: var(--yellow);
+  font-size: 18px;
+  min-width: 20px;
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-label {
+  color: var(--text-light);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.card-value {
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+.interests-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 1rem 0;
+}
+
+.interest-tag {
+  padding: 4px 10px;
+  background: rgba(27, 94, 32, 0.1);
+  color: var(--primary-green);
+  border: 1px solid var(--primary-green);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.contact-btn {
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.4);
+}
+
+.contact-btn.show {
+  background: linear-gradient(135deg, var(--yellow), #ffb300);
+  color: var(--primary-green);
+}
+
+.contact-info {
+  display: none;
+  background: linear-gradient(135deg, rgba(27, 94, 32, 0.05), rgba(255, 193, 7, 0.05));
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 12px;
+  border: 2px solid var(--yellow);
+}
+
+.contact-info.show {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.contact-line {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.contact-line:last-child {
+  margin-bottom: 0;
+}
+
+.contact-icon {
+  color: var(--primary-green);
+  font-weight: 700;
+  min-width: 20px;
+}
+
+.contact-text {
+  color: var(--text-dark);
+  word-break: break-all;
+  font-weight: 500;
+}
+
+.table-container {
+  display: none;
+  overflow-x: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.1);
+}
+
+.table-container.show {
+  display: block;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  font-size: 13px;
+}
+
+thead {
+  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+  position: sticky;
+  top: 0;
+}
+
+th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 700;
+  color: var(--white);
+  border-bottom: 3px solid var(--yellow);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--primary-green);
+  color: var(--text-dark);
+}
+
+tr:hover {
+  background: rgba(27, 94, 32, 0.05);
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-light);
+  font-size: 14px;
+  background: var(--gray-light);
+  border: 2px dashed var(--primary-green);
+  border-radius: 10px;
+  margin: 2rem 0;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-light);
+}
+
+.spinner {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(27, 94, 32, 0.2);
+  border-top-color: var(--primary-green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  header h1 { font-size: 24px; }
+  .directory-cards { grid-template-columns: 1fr; }
+  table { font-size: 12px; }
+  th, td { padding: 8px; }
+  .search-row { grid-template-columns: 1fr; }
+  .header-wrapper { flex-direction: column; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header-wrapper">
+    <header>
+      <h1>🏥 Community Medicine Malayalis</h1>
+      <p>Interactive Directory with Advanced Search & Filters</p>
+    </header>
+    <button class="settings-btn" onclick="openSettings()" title="Database Status">⚙️</button>
+  </div>
+
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Database Status</h2>
+        <button class="modal-close" onclick="closeSettings()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+      
+      <div class="status-item">
+        <div class="status-icon">📡</div>
+        <div class="status-info">
+          <h3>Connection Status</h3>
+          <p><span class="status-indicator" id="statusIndicator"></span><span id="statusText">Connecting...</span></p>
+        </div>
+      </div>
+      
+      <div class="status-item">
+        <div class="status-icon">👥</div>
+        <div class="status-info">
+          <h3>Total Members</h3>
+          <p id="totalRecords">0</p>
+        </div>
+      </div>
+      
+      <div class="status-item">
+        <div class="status-icon">💾</div>
+        <div class="status-info">
+          <h3>Data Size</h3>
+          <p><span id="csvSize">0</span> KB</p>
+        </div>
+      </div>
+      
+      <div class="status-item">
+        <div class="status-icon">🕐</div>
+        <div class="status-info">
+          <h3>Last Updated</h3>
+          <p id="lastUpdated">—</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="detailModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2 id="detailName">Member Details</h2>
+        <button class="modal-close" onclick="closeDetail()">
+          ✕
+        </button>
+      </div>
+      
+      <div id="detailContent" style="max-height: 70vh; overflow-y: auto;">
+        <!-- Details will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <div class="search-section">
+    <div class="search-title">
+      <i class="ti ti-search"></i> Search & Filter Directory
+    </div>
+    
+    <div class="search-row">
+      <div>
+        <label>🔍 Search by Name or Phone</label>
+        <input type="text" id="searchInput" placeholder="E.g., Daniel Kumar or 9876543210">
+      </div>
+      <div>
+        <label>📍 Filter by Native District</label>
+        <select id="districtFilter">
+          <option value="">All Districts</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label>💡 Filter by Areas of Interest</label>
+      <input type="text" id="interestFilter" placeholder="E.g., NCD, Hospital Administration, Epidemiology">
+    </div>
+  </div>
+
+  <div class="view-toggle">
+    <button class="view-btn active" onclick="switchView('card')" title="Card View">📇</button>
+    <button class="view-btn" onclick="switchView('table')" title="Table View">📊</button>
+  </div>
+
+  <div class="stats">
+    <span id="resultCount">Loading directory...</span>
+  </div>
+
+  <div class="directory-cards" id="directoryCards"></div>
+  
+  <div class="table-container" id="tableContainer" style="display: none;">
+    <table id="directoryTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('name')" style="cursor: pointer;">Name ↕️</th>
+          <th onclick="sortTable('district')" style="cursor: pointer;">District ↕️</th>
+          <th onclick="sortTable('status')" style="cursor: pointer;">Status ↕️</th>
+          <th onclick="sortTable('designation')" style="cursor: pointer;">Current Designation ↕️</th>
+          <th onclick="sortTable('organization')" style="cursor: pointer;">Organization ↕️</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const CSV_URL = 'https://raw.githubusercontent.com/SharanStudio/cmmdb/refs/heads/main/CMM_DB_v2%20-%20db.csv';
+
+let allData = [];
+let filteredData = [];
+let currentView = 'card';
+let sortField = 'name';
+let sortAsc = true;
+
+const COLUMNS = {
+  timestamp: 0, email: 1, name: 2, phone: 3, secondary_phone: 4, email_alt: 5,
+  native_district: 6, mbbs_completed: 7, ug_college: 8, ug_state: 9, ug_year: 10,
+  pg_status: 11, pg_college: 12, pg_state: 13, professional_status: 14,
+  pg_completion_expected: 15, md_completion_year: 16, current_work: 17,
+  designation: 18, organization: 19, working_state: 20, interests: 21, working_district: 22
+};
+
+function openSettings() {
+  document.getElementById('settingsModal').classList.add('show');
+}
+
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('show');
+}
+
+function openDetail(idx, name) {
+  const person = filteredData[idx];
+  document.getElementById('detailName').textContent = person.name;
+  
+  const isOngoingPG = person.professional_status.toLowerCase().includes('ongoing');
+  
+  const detailHtml = `
+    <div style="padding: 1rem;">
+      <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--yellow);">
+        <h3 style="color: var(--primary-green); font-size: 14px; font-weight: 700; margin-bottom: 0.5rem;">Basic Information</h3>
+        <p style="margin: 0.5rem 0;"><strong>District:</strong> ${escapeHtml(person.native_district)}</p>
+        <p style="margin: 0.5rem 0;"><strong>Current Status:</strong> ${escapeHtml(person.professional_status)}</p>
+        <p style="margin: 0.5rem 0;"><strong>Email:</strong> ${escapeHtml(person.email)}</p>
+        <p style="margin: 0.5rem 0;"><strong>Phone:</strong> ${escapeHtml(person.phone)}</p>
+        ${person.secondary_phone ? `<p style="margin: 0.5rem 0;"><strong>Secondary Phone:</strong> ${escapeHtml(person.secondary_phone)}</p>` : ''}
+      </div>
+      
+      ${!isOngoingPG ? `
+      <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--yellow);">
+        <h3 style="color: var(--primary-green); font-size: 14px; font-weight: 700; margin-bottom: 0.5rem;">Current Position</h3>
+        <p style="margin: 0.5rem 0;"><strong>Current Designation:</strong> ${escapeHtml(person.designation)}</p>
+        <p style="margin: 0.5rem 0;"><strong>Organization:</strong> ${escapeHtml(person.organization)}</p>
+      </div>
+      ` : ''}
+      
+      <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--yellow);">
+        <h3 style="color: var(--primary-green); font-size: 14px; font-weight: 700; margin-bottom: 0.5rem;">🎓 Undergraduate (MBBS)</h3>
+        <p style="margin: 0.5rem 0;"><strong>College:</strong> ${escapeHtml(person.ug_college || 'N/A')}</p>
+        <p style="margin: 0.5rem 0;"><strong>State:</strong> ${escapeHtml(person.ug_state || 'N/A')}</p>
+        <p style="margin: 0.5rem 0;"><strong>Year of Passing:</strong> ${escapeHtml(person.ug_year || 'N/A')}</p>
+      </div>
+      
+      <div>
+        <h3 style="color: var(--primary-green); font-size: 14px; font-weight: 700; margin-bottom: 0.5rem;">📚 Postgraduate (MD/MPH)</h3>
+        <p style="margin: 0.5rem 0;"><strong>College:</strong> ${escapeHtml(person.pg_college || 'N/A')}</p>
+        <p style="margin: 0.5rem 0;"><strong>State:</strong> ${escapeHtml(person.pg_state || 'N/A')}</p>
+        <p style="margin: 0.5rem 0;"><strong>Year of Passing/Expected:</strong> ${escapeHtml(person.md_completion_year || person.pg_completion_expected || 'N/A')}</p>
+      </div>
+      
+      ${person.interests ? `
+      <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid var(--yellow);">
+        <h3 style="color: var(--primary-green); font-size: 14px; font-weight: 700; margin-bottom: 0.5rem;">💡 Areas of Interest</h3>
+        <p style="margin: 0;">${escapeHtml(person.interests)}</p>
+      </div>
+      ` : ''}
+    </div>
+  `;
+  
+  document.getElementById('detailContent').innerHTML = detailHtml;
+  document.getElementById('detailModal').classList.add('show');
+}
+
+function closeDetail() {
+  document.getElementById('detailModal').classList.remove('show');
+}
+
+function sortTable(field) {
+  if (sortField === field) {
+    sortAsc = !sortAsc;
+  } else {
+    sortField = field;
+    sortAsc = true;
+  }
+  
+  const fieldMap = {
+    'name': 'name',
+    'district': 'native_district',
+    'status': 'professional_status',
+    'designation': 'designation',
+    'organization': 'organization'
+  };
+  
+  const sortKey = fieldMap[field] || field;
+  
+  filteredData.sort((a, b) => {
+    let aVal = a[sortKey] || '';
+    let bVal = b[sortKey] || '';
+    
+    if (typeof aVal === 'string') {
+      aVal = aVal.toLowerCase();
+      bVal = bVal.toLowerCase();
+    }
+    
+    if (sortAsc) {
+      return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+    } else {
+      return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+    }
+  });
+  
+  renderTable();
+}
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.closest('.view-btn').classList.add('active');
+  
+  if (view === 'card') {
+    document.getElementById('directoryCards').style.display = 'grid';
+    document.getElementById('tableContainer').style.display = 'none';
+  } else {
+    document.getElementById('directoryCards').style.display = 'none';
+    document.getElementById('tableContainer').style.display = 'block';
+    filterAndRender();
+  }
+}
+
+async function loadData() {
+  try {
+    const response = await fetch(CSV_URL);
+    const text = await response.text();
+    const sizeKB = (text.length / 1024).toFixed(2);
+    document.getElementById('csvSize').textContent = sizeKB;
+    
+    allData = parseCSV(text);
+    document.getElementById('totalRecords').textContent = allData.length;
+    
+    const now = new Date();
+    document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
+    document.getElementById('statusIndicator').classList.add('connected');
+    document.getElementById('statusText').textContent = 'Connected';
+    
+    if (allData.length === 0) {
+      document.getElementById('directoryCards').innerHTML = '<div class="no-results">⚠️ No valid records found.</div>';
+      return;
+    }
+    
+    populateFilters();
+    filterAndRender();
+  } catch (error) {
+    document.getElementById('statusIndicator').classList.add('error');
+    document.getElementById('statusText').textContent = 'Error: ' + error.message;
+    document.getElementById('directoryCards').innerHTML = '<div class="no-results">❌ Error: ' + error.message + '</div>';
+  }
+}
+
+function parseCSV(text) {
+  const lines = text.split('\n').filter(l => l.trim());
+  const data = [];
+  
+  for (let i = 1; i < lines.length; i++) {
+    const cells = parseCSVLine(lines[i]);
+    if (cells.length > 3 && cells[COLUMNS.phone]) {
+      data.push({
+        email: cells[COLUMNS.email] || cells[COLUMNS.email_alt] || '',
+        name: cells[COLUMNS.name] || '',
+        phone: cells[COLUMNS.phone] || '',
+        secondary_phone: cells[COLUMNS.secondary_phone] || '',
+        native_district: cells[COLUMNS.native_district] || '',
+        professional_status: cells[COLUMNS.professional_status] || '',
+        designation: cells[COLUMNS.designation] || '',
+        organization: cells[COLUMNS.organization] || '',
+        interests: cells[COLUMNS.interests] || '',
+        ug_college: cells[COLUMNS.ug_college] || '',
+        ug_state: cells[COLUMNS.ug_state] || '',
+        ug_year: cells[COLUMNS.ug_year] || '',
+        pg_college: cells[COLUMNS.pg_college] || '',
+        pg_state: cells[COLUMNS.pg_state] || '',
+        md_completion_year: cells[COLUMNS.md_completion_year] || '',
+        pg_completion_expected: cells[COLUMNS.pg_completion_expected] || ''
+      });
+    }
+  }
+  return data;
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim().replace(/^"|"$/g, ''));
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current.trim().replace(/^"|"$/g, ''));
+  return result;
+}
+
+function populateFilters() {
+  const districts = [...new Set(allData.map(d => d.native_district).filter(d => d))].sort();
+  const districtSelect = document.getElementById('districtFilter');
+  districts.forEach(d => {
+    const option = document.createElement('option');
+    option.value = d;
+    option.textContent = d;
+    districtSelect.appendChild(option);
+  });
+}
+
+function filterAndRender() {
+  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+  const districtFilter = document.getElementById('districtFilter').value;
+  const interestFilter = document.getElementById('interestFilter').value.toLowerCase();
+  
+  filteredData = allData.filter(row => {
+    const matchesSearch = row.name.toLowerCase().includes(searchTerm) || row.phone.includes(searchTerm);
+    const matchesDistrict = !districtFilter || row.native_district === districtFilter;
+    const matchesInterest = !interestFilter || row.interests.toLowerCase().includes(interestFilter);
+    return matchesSearch && matchesDistrict && matchesInterest;
+  });
+  
+  document.getElementById('resultCount').textContent = `${filteredData.length} result${filteredData.length !== 1 ? 's' : ''}`;
+  
+  if (currentView === 'card') {
+    renderCards();
+  } else {
+    renderTable();
+  }
+}
+
+function renderCards() {
+  const container = document.getElementById('directoryCards');
+  
+  if (filteredData.length === 0) {
+    container.innerHTML = '<div class="no-results" style="grid-column: 1/-1;">🔍 No members found matching your criteria.</div>';
+    return;
+  }
+  
+  container.innerHTML = filteredData.map((person, idx) => {
+    const statusClass = person.professional_status.toLowerCase().includes('completed') ? 'completed' : 'ongoing';
+    const statusText = person.professional_status.toLowerCase().includes('completed') ? 'Completed PG' : 'PG Ongoing';
+    const interests = person.interests.split(',').map(i => i.trim()).filter(i => i);
+    
+    return `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-name">${escapeHtml(person.name)}</div>
+          <span class="card-status ${statusClass}">${statusText}</span>
+        </div>
+        
+        <div class="card-body">
+          <div class="card-row">
+            <div class="card-icon">📍</div>
+            <div class="card-content">
+              <div class="card-label">District</div>
+              <div class="card-value">${escapeHtml(person.native_district)}</div>
+            </div>
+          </div>
+          
+          <div class="card-row">
+            <div class="card-icon">👔</div>
+            <div class="card-content">
+              <div class="card-label">Current Designation</div>
+              <div class="card-value">${escapeHtml(person.designation)}</div>
+            </div>
+          </div>
+          
+          <div class="card-row">
+            <div class="card-icon">🏢</div>
+            <div class="card-content">
+              <div class="card-label">Organization</div>
+              <div class="card-value">${escapeHtml(person.organization)}</div>
+            </div>
+          </div>
+        </div>
+        
+        ${interests.length > 0 ? `
+        <div class="interests-tags">
+          ${interests.map(i => `<span class="interest-tag">${escapeHtml(i)}</span>`).join('')}
+        </div>
+        ` : ''}
+        
+        <div style="display: flex; gap: 8px;">
+          <button class="contact-btn" style="flex: 1;" onclick="toggleContact(event, ${idx})">
+            <i class="ti ti-phone"></i> Show Contact Info
+          </button>
+          <button class="detail-btn" onclick="openDetail(${idx}, '${escapeHtml(person.name)}')" title="View Full Details">
+            👁️
+          </button>
+        </div>
+        
+        <div class="contact-info" id="contact-${idx}">
+          <div class="contact-line">
+            <span class="contact-icon">📧</span>
+            <span class="contact-text">${escapeHtml(person.email)}</span>
+          </div>
+          <div class="contact-line">
+            <span class="contact-icon">📱</span>
+            <span class="contact-text">${escapeHtml(person.phone)}</span>
+          </div>
+          ${person.secondary_phone ? `<div class="contact-line"><span class="contact-icon">☎️</span><span class="contact-text">${escapeHtml(person.secondary_phone)}</span></div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderTable() {
+  const tbody = document.getElementById('tableBody');
+  
+  if (filteredData.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="no-results">🔍 No members found</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = filteredData.map((person, idx) => {
+    const statusClass = person.professional_status.toLowerCase().includes('completed') ? 'completed' : 'ongoing';
+    const statusText = person.professional_status.toLowerCase().includes('completed') ? 'Completed' : 'Ongoing';
+    return `
+      <tr>
+        <td><strong>${escapeHtml(person.name)}</strong></td>
+        <td>${escapeHtml(person.native_district)}</td>
+        <td><span class="card-status ${statusClass}" style="display:inline-block;">${statusText}</span></td>
+        <td>${escapeHtml(person.designation)}</td>
+        <td>${escapeHtml(person.organization)}</td>
+        <td style="text-align: center; gap: 8px; display: flex; justify-content: center;">
+          <button class="detail-btn" onclick="openDetail(${idx})" title="View Details">👁️</button>
+          <button class="detail-btn" onclick="alert('📧 ' + '${escapeHtml(person.email)}\\n📱 ${escapeHtml(person.phone)}')" title="Show Contact">📱</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function toggleContact(event, idx) {
+  event.stopPropagation();
+  const contactInfo = document.getElementById(`contact-${idx}`);
+  const button = event.currentTarget;
+  
+  contactInfo.classList.toggle('show');
+  button.classList.toggle('show');
+  button.innerHTML = contactInfo.classList.contains('show') ? 
+    '<i class="ti ti-phone-x"></i> Hide Contact Info' : 
+    '<i class="ti ti-phone"></i> Show Contact Info';
+}
+
+function escapeHtml(text) {
+  const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
+  return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+document.getElementById('searchInput').addEventListener('input', filterAndRender);
+document.getElementById('districtFilter').addEventListener('change', filterAndRender);
+document.getElementById('interestFilter').addEventListener('input', filterAndRender);
+
+window.addEventListener('click', (e) => {
+  const settingsModal = document.getElementById('settingsModal');
+  const detailModal = document.getElementById('detailModal');
+  if (e.target === settingsModal) {
+    closeSettings();
+  }
+  if (e.target === detailModal) {
+    closeDetail();
+  }
+});
+
+loadData();
+</script>
+
+</body>
+</html>
