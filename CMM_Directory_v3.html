@@ -993,14 +993,29 @@ function filterAndRender() {
   const districtFilter = document.getElementById('districtFilter').value;
   const interestFilter = document.getElementById('interestFilter').value.toLowerCase();
   
+  // Check if any filter is active
+  const hasActiveFilter = searchTerm || districtFilter || interestFilter;
+  
+  if (!hasActiveFilter) {
+    // Show empty state when no filters are applied
+    document.getElementById('resultCount').textContent = 'Enter a name, select a district, or add an interest to view results';
+    const container = document.getElementById('directoryCards');
+    container.innerHTML = '<div class="no-results" style="grid-column: 1/-1;">🔎 Use the filters above to search the directory</div>';
+    const tbody = document.getElementById('tableBody');
+    if (tbody) {
+      tbody.innerHTML = '';
+    }
+    return;
+  }
+  
   filteredData = allData.filter(row => {
-    const matchesSearch = row.name.toLowerCase().includes(searchTerm) || row.phone.includes(searchTerm);
+    const matchesSearch = !searchTerm || row.name.toLowerCase().includes(searchTerm) || row.phone.includes(searchTerm);
     const matchesDistrict = !districtFilter || row.native_district === districtFilter;
     const matchesInterest = !interestFilter || row.interests.toLowerCase().includes(interestFilter);
     return matchesSearch && matchesDistrict && matchesInterest;
   });
   
-  document.getElementById('resultCount').textContent = `${filteredData.length} result${filteredData.length !== 1 ? 's' : ''}`;
+  document.getElementById('resultCount').textContent = `${filteredData.length} result${filteredData.length !== 1 ? 's' : ''} found`;
   
   if (currentView === 'card') {
     renderCards();
