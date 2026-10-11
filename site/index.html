@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community Medicine Malayalis Directory</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary-green: #1b5e20;
+  --light-green: #2e7d32;
+  --yellow: #ffc107;
+  --white: #ffffff;
+  --gray-light: #f5f5f5;
+  --text-dark: #1a1a1a;
+  --text-light: #555;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #f0f9f5 0%, #e8f5e9 100%);
+  color: var(--text-dark);
+  padding: 20px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container { max-width: 1000px; margin: 0 auto; }
+
+.header-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+header { flex: 1; text-align: center; }
+header h1 { font-size: 32px; font-weight: 700; margin-bottom: 0.5rem; color: var(--primary-green); }
+header p { font-size: 14px; color: var(--text-light); }
+
+.settings-btn {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+  border: 2px solid var(--yellow); color: white; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+  transition: all 0.3s; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
+}
+.settings-btn:hover { transform: rotate(20deg) scale(1.1); box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4); }
+
+.detail-btn { background: none; border: none; color: var(--yellow); cursor: pointer; font-size: 18px; padding: 4px; transition: all 0.3s; }
+.detail-btn:hover { transform: scale(1.3); }
+
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
+.modal.show { display: flex; align-items: center; justify-content: center; }
+.modal-content {
+  background: var(--white); padding: 2rem; border-radius: 12px; border-left: 6px solid var(--yellow);
+  max-width: 400px; width: 90%; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--yellow); padding-bottom: 1rem; }
+.modal-header h2 { font-size: 18px; color: var(--primary-green); }
+.modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--primary-green); }
+
+.status-item { display: grid; grid-template-columns: auto 1fr; gap: 12px; margin-bottom: 1rem; padding: 1rem; background: var(--gray-light); border-radius: 8px; border-left: 4px solid var(--primary-green); }
+.status-item:last-child { margin-bottom: 0; }
+.status-icon { font-size: 24px; display: flex; align-items: center; }
+.status-info h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--primary-green); margin-bottom: 4px; letter-spacing: 0.5px; }
+.status-info p { font-size: 14px; font-weight: 600; margin: 0; }
+.status-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ffa500; margin-right: 6px; }
+.status-indicator.connected { background: #4CAF50; }
+.status-indicator.error { background: #f44336; }
+
+.search-section { background: var(--white); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.1); margin-bottom: 2rem; border-top: 4px solid var(--yellow); }
+.search-title { font-size: 16px; font-weight: 700; color: var(--primary-green); margin-bottom: 1.5rem; }
+.search-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+label { font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--primary-green); display: block; margin-bottom: 8px; letter-spacing: 0.5px; }
+input[type="text"], select {
+  width: 100%; padding: 12px 14px; border: 2px solid var(--primary-green); border-radius: 8px;
+  font-size: 14px; background: var(--white); color: var(--text-dark);
+}
+input[type="text"]:focus, select:focus { outline: none; border-color: var(--yellow); box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.2); background: #fffef5; }
+
+.view-toggle { position: fixed; right: 20px; top: 100px; display: flex; flex-direction: column; gap: 8px; z-index: 100; }
+.view-btn {
+  width: 50px; height: 50px; border: 2px solid var(--primary-green); background: var(--white); color: var(--primary-green);
+  border-radius: 50%; cursor: pointer; font-size: 20px; transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.2);
+}
+.view-btn.active { background: linear-gradient(135deg, var(--primary-green), var(--light-green)); border-color: var(--yellow); transform: scale(1.15); }
+.view-btn:hover:not(.active) { border-color: var(--yellow); transform: scale(1.1); }
+
+.stats { font-size: 14px; color: var(--primary-green); margin-bottom: 1.5rem; padding: 1rem; background: linear-gradient(135deg, rgba(27, 94, 32, 0.05), rgba(255, 193, 7, 0.05)); border-left: 4px solid var(--yellow); border-radius: 6px; font-weight: 700; }
+
+.directory-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.card { background: var(--white); border: 2px solid var(--primary-green); border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.1); transition: all 0.3s; position: relative; overflow: hidden; }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--light-green), var(--yellow)); }
+.card:hover { transform: translateY(-8px); box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3); border-color: var(--yellow); }
+.card-header { margin-bottom: 1rem; }
+.card-name { font-size: 16px; font-weight: 700; color: var(--primary-green); margin-bottom: 0.5rem; }
+.card-status { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.card-status.completed { background: rgba(46, 125, 50, 0.2); color: var(--light-green); border: 1px solid var(--light-green); }
+.card-status.ongoing { background: rgba(255, 193, 7, 0.2); color: #cc9a00; border: 1px solid #cc9a00; }
+.card-body { display: grid; gap: 0.75rem; margin-bottom: 1rem; font-size: 13px; }
+.card-row { display: flex; gap: 8px; align-items: flex-start; }
+.card-icon { color: var(--yellow); font-size: 18px; min-width: 20px; }
+.card-content { flex: 1; }
+.card-label { color: var(--text-light); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.card-value { font-weight: 600; }
+
+.interests-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 1rem 0; }
+.interest-tag { padding: 4px 10px; background: rgba(27, 94, 32, 0.1); color: var(--primary-green); border: 1px solid var(--primary-green); border-radius: 4px; font-size: 11px; font-weight: 600; }
+
+.contact-btn {
+  width: 100%; padding: 11px; background: linear-gradient(135deg, var(--primary-green), var(--light-green)); color: white;
+  border: none; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.contact-btn:hover { transform: scale(1.02); box-shadow: 0 4px 12px rgba(27, 94, 32, 0.4); }
+.contact-btn.show { background: linear-gradient(135deg, var(--yellow), #ffb300); color: var(--primary-green); }
+
+.contact-info { display: none; background: linear-gradient(135deg, rgba(27, 94, 32, 0.05), rgba(255, 193, 7, 0.05)); padding: 12px; border-radius: 6px; margin-top: 12px; border: 2px solid var(--yellow); }
+.contact-info.show { display: block; }
+.contact-line { display: flex; gap: 8px; font-size: 12px; }
+.contact-text { word-break: break-all; font-weight: 500; }
+.contact-text a { color: var(--primary-green); }
+
+.table-container { display: none; overflow-x: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.1); }
+table { width: 100%; border-collapse: collapse; background: var(--white); font-size: 13px; }
+thead { background: linear-gradient(135deg, var(--primary-green), var(--light-green)); }
+th { padding: 12px; text-align: left; font-weight: 700; color: #fff; border-bottom: 3px solid var(--yellow); text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; cursor: pointer; }
+th.nosort { cursor: default; }
+td { padding: 12px; border-bottom: 1px solid #c8e6c9; }
+tr:hover { background: rgba(27, 94, 32, 0.05); }
+.actions-cell { text-align: center; white-space: nowrap; }
+
+.no-results { text-align: center; padding: 3rem; color: var(--text-light); font-size: 14px; background: var(--gray-light); border: 2px dashed var(--primary-green); border-radius: 10px; margin: 2rem 0; }
+.footer-note { text-align: center; font-size: 12px; color: var(--text-light); margin: 1rem 0 2rem; }
+
+.detail-section { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--yellow); }
+.detail-section:last-child { border-bottom: none; margin-bottom: 0; }
+.detail-section h3 { color: var(--primary-green); font-size: 14px; font-weight: 700; margin-bottom: 0.5rem; }
+.detail-section p { margin: 0.5rem 0; font-size: 14px; }
+
+@media (max-width: 768px) {
+  .search-row { grid-template-columns: 1fr; }
+  .view-toggle { position: static; flex-direction: row; margin-bottom: 1.5rem; padding: 1rem; background: var(--gray-light); border-radius: 8px; border: 2px solid var(--primary-green); }
+  .view-btn { flex: 1; width: auto; height: auto; padding: 10px; border-radius: 6px; }
+}
+@media (max-width: 640px) {
+  header h1 { font-size: 24px; }
+  .directory-cards { grid-template-columns: 1fr; }
+  table { font-size: 12px; }
+  th, td { padding: 8px; }
+  .header-wrapper { flex-direction: column; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header-wrapper">
+    <header>
+      <h1>🏥 Community Medicine Malayalis</h1>
+      <p>Member directory with search and filters</p>
+    </header>
+    <button class="settings-btn" id="settingsBtn" title="Database status">⚙️</button>
+  </div>
+
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Database Status</h2>
+        <button class="modal-close" data-close="settingsModal">✕</button>
+      </div>
+      <div class="status-item">
+        <div class="status-icon">📡</div>
+        <div class="status-info"><h3>Connection Status</h3>
+          <p><span class="status-indicator" id="statusIndicator"></span><span id="statusText">Connecting...</span></p></div>
+      </div>
+      <div class="status-item">
+        <div class="status-icon">👥</div>
+        <div class="status-info"><h3>Total Members</h3><p id="totalRecords">0</p></div>
+      </div>
+      <div class="status-item">
+        <div class="status-icon">💾</div>
+        <div class="status-info"><h3>Data Size</h3><p><span id="csvSize">0</span> KB</p></div>
+      </div>
+      <div class="status-item">
+        <div class="status-icon">🕐</div>
+        <div class="status-info"><h3>Loaded At</h3><p id="lastUpdated">—</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="detailModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2 id="detailName">Member Details</h2>
+        <button class="modal-close" data-close="detailModal">✕</button>
+      </div>
+      <div id="detailContent" style="max-height: 70vh; overflow-y: auto;"></div>
+    </div>
+  </div>
+
+  <div class="search-section">
+    <div class="search-title">🔎 Search &amp; Filter Directory</div>
+    <div class="search-row">
+      <div>
+        <label for="searchInput">Search by name or organization</label>
+        <input type="text" id="searchInput" placeholder="E.g., Daniel Kumar or Medical College">
+      </div>
+      <div>
+        <label for="districtFilter">Filter by native district</label>
+        <select id="districtFilter"><option value="">All Districts</option></select>
+      </div>
+    </div>
+    <div>
+      <label for="interestFilter">Filter by areas of interest</label>
+      <input type="text" id="interestFilter" placeholder="E.g., NCD, Hospital Administration, Epidemiology">
+    </div>
+  </div>
+
+  <div class="view-toggle">
+    <button class="view-btn active" id="cardViewBtn" title="Card view">📇</button>
+    <button class="view-btn" id="tableViewBtn" title="Table view">📊</button>
+  </div>
+
+  <div class="stats"><span id="resultCount">Loading directory...</span></div>
+
+  <div class="directory-cards" id="directoryCards"></div>
+
+  <div class="table-container" id="tableContainer">
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="name">Name ↕</th>
+          <th data-sort="native_district">District ↕</th>
+          <th data-sort="professional_status">Status ↕</th>
+          <th data-sort="designation">Designation ↕</th>
+          <th data-sort="organization">Organization ↕</th>
+          <th class="nosort">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <p class="footer-note">Phone numbers are not shown in this directory.</p>
+</div>
+
+<script>
+// The CSV sits in the same folder as this page.
+const CSV_URL = 'directory.csv';
+const EMAIL_RE = /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']+$/;
+
+let allData = [];
+let filteredData = [];
+let currentView = 'card';
+let sortField = 'name';
+let sortAsc = true;
+
+const $ = (id) => document.getElementById(id);
+
+function escapeHtml(text) {
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+  return String(text == null ? '' : text).replace(/[&<>"']/g, (m) => map[m]);
+}
+
+// Reads the whole CSV text, handles quoted commas and line breaks inside cells.
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cell = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') { cell += '"'; i++; }
+        else inQuotes = false;
+      } else cell += ch;
+    } else if (ch === '"') inQuotes = true;
+    else if (ch === ',') { row.push(cell); cell = ''; }
+    else if (ch === '\n' || ch === '\r') {
+      if (ch === '\r' && text[i + 1] === '\n') i++;
+      row.push(cell); cell = '';
+      if (row.some((c) => c.trim() !== '')) rows.push(row);
+      row = [];
+    } else cell += ch;
+  }
+  row.push(cell);
+  if (row.some((c) => c.trim() !== '')) rows.push(row);
+  return rows;
+}
+
+// Turns rows into records using the header names, so column order does not matter.
+function rowsToRecords(rows) {
+  if (rows.length < 2) return [];
+  const header = rows[0].map((h) => h.trim());
+  const records = [];
+  for (let i = 1; i < rows.length; i++) {
+    const rec = {};
+    header.forEach((h, idx) => { rec[h] = (rows[i][idx] || '').trim(); });
+    if (rec.name) records.push(rec);
+  }
+  return records;
+}
+
+async function loadData() {
+  try {
+    const response = await fetch(CSV_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const text = await response.text();
+    $('csvSize').textContent = (text.length / 1024).toFixed(2);
+
+    allData = rowsToRecords(parseCSV(text));
+    $('totalRecords').textContent = allData.length;
+    $('lastUpdated').textContent = new Date().toLocaleTimeString();
+    $('statusIndicator').classList.add('connected');
+    $('statusText').textContent = 'Connected';
+
+    if (allData.length === 0) {
+      $('directoryCards').innerHTML = '<div class="no-results">⚠️ No valid records found.</div>';
+      $('resultCount').textContent = '0 results';
+      return;
+    }
+    populateFilters();
+    filterAndRender();
+  } catch (error) {
+    $('statusIndicator').classList.add('error');
+    $('statusText').textContent = 'Error: ' + error.message;
+    $('resultCount').textContent = 'Could not load the directory';
+    $('directoryCards').innerHTML = '<div class="no-results" style="grid-column:1/-1;">❌ Could not load the directory. Please try again later.</div>';
+  }
+}
+
+function populateFilters() {
+  const districts = [...new Set(allData.map((d) => d.native_district).filter(Boolean))].sort();
+  const select = $('districtFilter');
+  districts.forEach((d) => {
+    const option = document.createElement('option');
+    option.value = d;
+    option.textContent = d;
+    select.appendChild(option);
+  });
+}
+
+function sortData() {
+  filteredData.sort((a, b) => {
+    const aVal = String(a[sortField] || '').toLowerCase();
+    const bVal = String(b[sortField] || '').toLowerCase();
+    if (aVal === bVal) return 0;
+    return (aVal > bVal ? 1 : -1) * (sortAsc ? 1 : -1);
+  });
+}
+
+function filterAndRender() {
+  const term = $('searchInput').value.toLowerCase().trim();
+  const district = $('districtFilter').value;
+  const interest = $('interestFilter').value.toLowerCase().trim();
+
+  filteredData = allData.filter((row) =>
+    (!term || row.name.toLowerCase().includes(term) || (row.organization || '').toLowerCase().includes(term)) &&
+    (!district || row.native_district === district) &&
+    (!interest || (row.interests || '').toLowerCase().includes(interest))
+  );
+  sortData();
+
+  $('resultCount').textContent = filteredData.length + ' result' + (filteredData.length !== 1 ? 's' : '');
+  if (currentView === 'card') renderCards(); else renderTable();
+}
+
+function isCompleted(person) {
+  return (person.professional_status || '').toLowerCase().includes('completed');
+}
+
+function emailLink(email) {
+  if (!EMAIL_RE.test(email)) return '<span class="contact-text">Not provided</span>';
+  const safe = escapeHtml(email);
+  return '<span class="contact-text"><a href="mailto:' + safe + '">' + safe + '</a></span>';
+}
+
+function renderCards() {
+  const container = $('directoryCards');
+  if (filteredData.length === 0) {
+    container.innerHTML = '<div class="no-results" style="grid-column: 1/-1;">🔍 No members found matching your criteria.</div>';
+    return;
+  }
+  container.innerHTML = filteredData.map((person, idx) => {
+    const done = isCompleted(person);
+    const interests = (person.interests || '').split(',').map((i) => i.trim()).filter(Boolean);
+    return `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-name">${escapeHtml(person.name)}</div>
+          <span class="card-status ${done ? 'completed' : 'ongoing'}">${done ? 'Completed PG' : 'PG Ongoing'}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-row"><div class="card-icon">📍</div><div class="card-content"><div class="card-label">District</div><div class="card-value">${escapeHtml(person.native_district)}</div></div></div>
+          <div class="card-row"><div class="card-icon">👔</div><div class="card-content"><div class="card-label">Current Designation</div><div class="card-value">${escapeHtml(person.designation)}</div></div></div>
+          <div class="card-row"><div class="card-icon">🏢</div><div class="card-content"><div class="card-label">Organization</div><div class="card-value">${escapeHtml(person.organization)}</div></div></div>
+        </div>
+        ${interests.length ? '<div class="interests-tags">' + interests.map((i) => '<span class="interest-tag">' + escapeHtml(i) + '</span>').join('') + '</div>' : ''}
+        <div style="display:flex; gap:8px;">
+          <button class="contact-btn" style="flex:1;" data-contact="${idx}">Show Email</button>
+          <button class="detail-btn" data-detail="${idx}" title="View full details">👁️</button>
+        </div>
+        <div class="contact-info" id="contact-${idx}">
+          <div class="contact-line"><span>📧</span>${emailLink(person.email)}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderTable() {
+  const tbody = $('tableBody');
+  if (filteredData.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="no-results">🔍 No members found</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filteredData.map((person, idx) => {
+    const done = isCompleted(person);
+    return `
+      <tr>
+        <td><strong>${escapeHtml(person.name)}</strong></td>
+        <td>${escapeHtml(person.native_district)}</td>
+        <td><span class="card-status ${done ? 'completed' : 'ongoing'}">${done ? 'Completed' : 'Ongoing'}</span></td>
+        <td>${escapeHtml(person.designation)}</td>
+        <td>${escapeHtml(person.organization)}</td>
+        <td class="actions-cell"><button class="detail-btn" data-detail="${idx}" title="View details and email">👁️</button></td>
+      </tr>`;
+  }).join('');
+}
+
+function openDetail(idx) {
+  const person = filteredData[idx];
+  if (!person) return;
+  const ongoing = !isCompleted(person);
+  $('detailName').textContent = person.name;
+  $('detailContent').innerHTML = `
+    <div class="detail-section">
+      <h3>Basic Information</h3>
+      <p><strong>District:</strong> ${escapeHtml(person.native_district)}</p>
+      <p><strong>Current Status:</strong> ${escapeHtml(person.professional_status)}</p>
+      <p><strong>Email:</strong> ${emailLink(person.email)}</p>
+    </div>
+    ${ongoing ? '' : `
+    <div class="detail-section">
+      <h3>Current Position</h3>
+      <p><strong>Designation:</strong> ${escapeHtml(person.designation || 'N/A')}</p>
+      <p><strong>Organization:</strong> ${escapeHtml(person.organization || 'N/A')}</p>
+    </div>`}
+    <div class="detail-section">
+      <h3>🎓 Undergraduate (MBBS)</h3>
+      <p><strong>College:</strong> ${escapeHtml(person.ug_college || 'N/A')}</p>
+      <p><strong>State:</strong> ${escapeHtml(person.ug_state || 'N/A')}</p>
+      <p><strong>Year of Passing:</strong> ${escapeHtml(person.ug_year || 'N/A')}</p>
+    </div>
+    <div class="detail-section">
+      <h3>📚 Postgraduate (MD/MPH)</h3>
+      <p><strong>College:</strong> ${escapeHtml(person.pg_college || 'N/A')}</p>
+      <p><strong>State:</strong> ${escapeHtml(person.pg_state || 'N/A')}</p>
+      <p><strong>Year of Passing / Expected:</strong> ${escapeHtml(person.md_completion_year || person.pg_completion_expected || 'N/A')}</p>
+    </div>
+    ${person.interests ? `
+    <div class="detail-section">
+      <h3>💡 Areas of Interest</h3>
+      <p>${escapeHtml(person.interests)}</p>
+    </div>` : ''}`;
+  $('detailModal').classList.add('show');
+}
+
+function switchView(view) {
+  currentView = view;
+  $('cardViewBtn').classList.toggle('active', view === 'card');
+  $('tableViewBtn').classList.toggle('active', view === 'table');
+  $('directoryCards').style.display = view === 'card' ? 'grid' : 'none';
+  $('tableContainer').style.display = view === 'table' ? 'block' : 'none';
+  filterAndRender();
+}
+
+// ---- Events (no inline handlers, so no member data ever sits inside an onclick) ----
+$('searchInput').addEventListener('input', filterAndRender);
+$('districtFilter').addEventListener('change', filterAndRender);
+$('interestFilter').addEventListener('input', filterAndRender);
+$('cardViewBtn').addEventListener('click', () => switchView('card'));
+$('tableViewBtn').addEventListener('click', () => switchView('table'));
+$('settingsBtn').addEventListener('click', () => $('settingsModal').classList.add('show'));
+
+document.addEventListener('click', (e) => {
+  const closeBtn = e.target.closest('[data-close]');
+  if (closeBtn) { $(closeBtn.dataset.close).classList.remove('show'); return; }
+  if (e.target.classList.contains('modal')) { e.target.classList.remove('show'); return; }
+
+  const detailBtn = e.target.closest('[data-detail]');
+  if (detailBtn) { openDetail(Number(detailBtn.dataset.detail)); return; }
+
+  const contactBtn = e.target.closest('[data-contact]');
+  if (contactBtn) {
+    const box = $('contact-' + contactBtn.dataset.contact);
+    const shown = box.classList.toggle('show');
+    contactBtn.classList.toggle('show', shown);
+    contactBtn.textContent = shown ? 'Hide Email' : 'Show Email';
+    return;
+  }
+
+  const th = e.target.closest('th[data-sort]');
+  if (th) {
+    const field = th.dataset.sort;
+    if (sortField === field) sortAsc = !sortAsc; else { sortField = field; sortAsc = true; }
+    filterAndRender();
+  }
+});
+
+loadData();
+</script>
+
+</body>
+</html>
