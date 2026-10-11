@@ -32,6 +32,14 @@ button,input,select{font-family:inherit;color:inherit}
 .logo{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.3px}
 .logo span{color:var(--gold)}
 .mast-title{font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;text-align:right}
+.mast-r{display:flex;align-items:center;gap:20px}
+.join-btn{display:inline-block;background:var(--gold);color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:9px 18px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:transform .12s,box-shadow .12s}
+.join-btn:hover{color:var(--ink);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.join-btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.join-line{margin-top:12px;font-size:14px;font-weight:600}
+.join-line a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:3px;text-underline-offset:3px}
+.foot a{color:#fff;text-decoration:underline}
+@media(max-width:720px){.mast-title{display:none}}
 
 /* hero */
 .hero{display:flex;flex-wrap:wrap;gap:32px 48px;align-items:flex-end;padding:clamp(32px,6vw,56px) 0 clamp(24px,4vw,40px)}
@@ -170,7 +178,7 @@ main{flex:1}
 
 <header class="mast"><div class="wrap">
   <div class="logo">CMM<span>.</span></div>
-  <div class="mast-title">Community Medicine Malayalis</div>
+  <div class="mast-r"><div class="mast-title">Community Medicine Malayalis</div><a class="join-btn" href="https://docs.google.com/forms/d/e/1FAIpQLScqlafdQdbwn4M9MFp9jp8qxXYpPZm8fULQ5s_ktDN0arLXPQ/viewform?pli=1" rel="noopener noreferrer" target="_blank" data-join>Join / update your profile</a></div>
 </div></header>
 
 <main>
@@ -180,6 +188,7 @@ main{flex:1}
     <div class="hero-side">
       <p>This directory exists so Malayali community medicine professionals can find batchmates, seniors, juniors and collaborators across colleges and workplaces.</p>
       <div class="privacy"><b>Please respect privacy.</b> Members shared these details in trust. Use this directory for professional purposes only. Do not copy, scrape, share or use it for unsolicited contact. Phone numbers are never shown.</div>
+      <div class="join-line">Not listed yet? <a href="https://docs.google.com/forms/d/e/1FAIpQLScqlafdQdbwn4M9MFp9jp8qxXYpPZm8fULQ5s_ktDN0arLXPQ/viewform?pli=1" rel="noopener noreferrer" target="_blank" data-join>Join / update your profile</a></div>
     </div>
   </section>
 
@@ -233,7 +242,7 @@ main{flex:1}
 </main>
 
 <footer class="foot"><div class="wrap">
-  <div>Developed at <b>smstudio</b> &nbsp;·&nbsp; © 2026 &nbsp;·&nbsp; Anonymous, cookie-free usage statistics</div>
+  <div>Developed at <b>smstudio</b> &nbsp;·&nbsp; © 2026 &nbsp;·&nbsp; Anonymous, cookie-free usage statistics &nbsp;·&nbsp; <a href="https://docs.google.com/forms/d/e/1FAIpQLScqlafdQdbwn4M9MFp9jp8qxXYpPZm8fULQ5s_ktDN0arLXPQ/viewform?pli=1" rel="noopener noreferrer" target="_blank" data-join>Join / update your profile</a></div>
   <div class="in">Proudly made in India</div>
 </div></footer>
 
@@ -511,6 +520,7 @@ function closeDetail() { $('overlay').classList.remove('show'); }
 var PLACEHOLDERS = {
   name: 'Type a name', college: 'e.g. Kottayam, JIPMER, Amala, Government Medical College', org: 'Organization or designation'
 };
+document.addEventListener('click', function (e) { if (e.target.closest('[data-join]')) track('join-click'); });
 document.querySelector('.tabs').addEventListener('click', function (e) {
   var b = e.target.closest('.tab'); if (!b) return;
   S.scope = b.getAttribute('data-scope');
