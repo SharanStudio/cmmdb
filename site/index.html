@@ -159,6 +159,8 @@ main{flex:1}
   .mast-title{display:none}
 }
 </style>
+<script data-goatcounter="https://cmm.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
@@ -227,7 +229,7 @@ main{flex:1}
 </main>
 
 <footer class="foot"><div class="wrap">
-  <div>Developed at <b>smstudio</b> &nbsp;·&nbsp; © 2026</div>
+  <div>Developed at <b>smstudio</b> &nbsp;·&nbsp; © 2026 &nbsp;·&nbsp; Anonymous, cookie-free usage statistics</div>
   <div class="in">Proudly made in India</div>
 </div></footer>
 
@@ -295,6 +297,22 @@ function statusInfo(r) {
   if (r.professional_status === 'PG Ongoing') return { text: 'PG ongoing', cls: 'ongoing' };
   if (r.professional_status === 'Completed PG') return { text: 'PG completed', cls: 'done' };
   return { text: '', cls: '' };
+}
+
+/* ---------- anonymous usage events (GoatCounter: no cookies, no search text, no names) ---------- */
+function track(name) {
+  try {
+    if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+      window.goatcounter.count({ path: 'event/' + name, title: name, event: true });
+    }
+  } catch (e) { /* analytics must never break the page */ }
+}
+var searchTimer = null;
+function trackSearch() {
+  clearTimeout(searchTimer);
+  var n = activeToks().join('').length;
+  if (n < 3) return;
+  searchTimer = setTimeout(function () { track('search-' + S.scope); }, 1500);
 }
 
 /* ---------- state ---------- */
@@ -492,35 +510,36 @@ var PLACEHOLDERS = {
 document.querySelector('.tabs').addEventListener('click', function (e) {
   var b = e.target.closest('.tab'); if (!b) return;
   S.scope = b.getAttribute('data-scope');
+  track('tab-' + S.scope);
   document.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', t === b ? 'true' : 'false'); });
   $('q').placeholder = PLACEHOLDERS[S.scope];
   $('hint').style.display = S.scope === 'college' ? '' : 'none';
   showSuggest(); render(true);
 });
-$('q').addEventListener('input', function () { showSuggest(); render(true); });
+$('q').addEventListener('input', function () { showSuggest(); render(true); trackSearch(); });
 $('q').addEventListener('focus', showSuggest);
-$('district').addEventListener('change', function () { render(true); });
-$('interest').addEventListener('input', function () { render(true); });
+$('district').addEventListener('change', function () { if (this.value) track('filter-district'); render(true); });
+$('interest').addEventListener('input', function () { render(true); if (tokens(this.value).length) { clearTimeout(searchTimer); searchTimer = setTimeout(function () { track('filter-interest'); }, 1500); } });
 $('suggestions').addEventListener('click', function (e) {
   var b = e.target.closest('button[data-fill]'); if (!b) return;
   $('q').value = b.getAttribute('data-fill'); $('suggestions').classList.remove('show'); render(true);
 });
 document.addEventListener('click', function (e) { if (!e.target.closest('.qwrap')) $('suggestions').classList.remove('show'); });
-$('vCards').addEventListener('click', function () { S.view = 'cards'; $('vCards').setAttribute('aria-pressed', 'true'); $('vTable').setAttribute('aria-pressed', 'false'); render(false); });
-$('vTable').addEventListener('click', function () { S.view = 'table'; $('vTable').setAttribute('aria-pressed', 'true'); $('vCards').setAttribute('aria-pressed', 'false'); render(false); });
+$('vCards').addEventListener('click', function () { S.view = 'cards'; track('view-cards'); $('vCards').setAttribute('aria-pressed', 'true'); $('vTable').setAttribute('aria-pressed', 'false'); render(false); });
+$('vTable').addEventListener('click', function () { S.view = 'table'; track('view-table'); $('vTable').setAttribute('aria-pressed', 'true'); $('vCards').setAttribute('aria-pressed', 'false'); render(false); });
 $('sortKey').addEventListener('change', function () { S.sortKey = this.value; render(true); });
 $('sortDir').addEventListener('click', function () { S.sortDir *= -1; render(true); });
 $('out').addEventListener('click', function (e) {
   var s = e.target.closest('[data-sort]');
-  if (s) { var k = s.getAttribute('data-sort'); if (S.sortKey === k) S.sortDir *= -1; else { S.sortKey = k; S.sortDir = 1; } render(true); return; }
+  if (s) { track('table-sort'); var k = s.getAttribute('data-sort'); if (S.sortKey === k) S.sortDir *= -1; else { S.sortKey = k; S.sortDir = 1; } render(true); return; }
   var b = e.target.closest('[data-act]'); if (!b) return;
   var id = parseInt(b.getAttribute('data-id'), 10);
-  if (b.getAttribute('data-act') === 'email') { S.revealed[id] = !S.revealed[id]; render(false); }
-  else openDetail(id);
+  if (b.getAttribute('data-act') === 'email') { S.revealed[id] = !S.revealed[id]; if (S.revealed[id]) track('email-reveal'); render(false); }
+  else { track('details-open'); openDetail(id); }
 });
 $('pager').addEventListener('click', function (e) {
   var b = e.target.closest('[data-page]'); if (!b || b.disabled) return;
-  S.page = parseInt(b.getAttribute('data-page'), 10); render(false);
+  S.page = parseInt(b.getAttribute('data-page'), 10); if (S.page > 1) track('page-next'); render(false);
   $('results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 $('mclose').addEventListener('click', closeDetail);
