@@ -31,34 +31,35 @@ button,input,select{font-family:inherit;color:inherit}
 
 /* hero */
 .hero{display:flex;flex-wrap:wrap;gap:32px 48px;align-items:flex-end;padding:clamp(32px,6vw,56px) 0 clamp(24px,4vw,40px)}
-.hero h1{flex:1 1 520px;font-family:var(--display);font-weight:800;font-size:clamp(44px,8.4vw,88px);line-height:.95;letter-spacing:-.035em}
-.hero h1 mark{background:var(--gold);color:var(--ink);padding:0 .15em;border-radius:8px}
+.hero h1{flex:1 1 560px;font-family:var(--display);font-weight:800;font-size:clamp(36px,5.4vw,62px);line-height:1.12;letter-spacing:-.03em}
+.hero h1 mark{background:var(--gold);color:var(--ink);padding:0 .15em;border-radius:8px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .hero-side{flex:1 1 320px;min-width:0}
 .hero-side p{font-size:17px;line-height:1.6;color:#3b4146;margin-bottom:14px}
 .privacy{padding:14px 16px;border-radius:12px;background:var(--green-soft);border:1px solid #cfe5d3;font-size:13px;line-height:1.55;color:#1f4a2c}
 
 /* search box */
-.search{border:2px solid var(--ink);border-radius:18px;background:var(--white);box-shadow:6px 6px 0 var(--ink);overflow:hidden}
-.tabs{display:flex;flex-wrap:wrap;border-bottom:2px solid var(--ink)}
-.tab{flex:1 1 120px;padding:13px 8px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:var(--white);border:none;border-right:1px solid var(--ink);cursor:pointer}
+.search{border:2px solid var(--ink);border-radius:18px;background:var(--white);box-shadow:6px 6px 0 var(--ink);position:relative}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:2px solid var(--ink);border-radius:16px 16px 0 0;overflow:hidden}
+.tab{padding:14px 8px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:var(--white);border:none;border-right:1px solid var(--ink);cursor:pointer}
 .tab:last-child{border-right:none}
 .tab[aria-selected="true"]{background:var(--ink);color:#fff}
 .tab:hover:not([aria-selected="true"]){background:var(--gold-soft)}
-.sbar{display:flex;flex-wrap:wrap;align-items:stretch}
-.qwrap{flex:3 1 380px;position:relative;display:flex;align-items:center;gap:14px;padding:0 22px;min-height:72px}
+.sbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;position:relative}
+.qwrap{position:static;display:flex;align-items:center;gap:14px;padding:0 22px;min-height:72px}
 .qwrap svg{flex:none}
-.qwrap input{flex:1;min-width:0;border:none;background:none;font-size:20px;font-weight:600;padding:20px 0;outline:none}
+.qwrap input{flex:1;min-width:0;border:none;background:none;font-size:18px;font-weight:600;padding:20px 0;outline:none}
 .qwrap input::placeholder{color:#9aa0a5;font-weight:500}
 .qwrap:focus-within{background:#fffdf4}
-.sel{flex:1 1 180px;border-left:1px solid var(--line);display:flex;align-items:center}
+.sel{border-left:1px solid var(--line);display:flex;align-items:center}
 .sel select,.sel input{width:100%;height:100%;min-height:72px;border:none;background:none;padding:0 20px;font-size:14px;color:var(--muted);outline:none}
 .sel select:focus,.sel input:focus{background:#fffdf4}
-.hint{padding:12px 22px;background:var(--gold-soft);border-top:1px solid #f0d890;font-size:13px;line-height:1.5;color:#5c4600}
-.suggestions{position:absolute;left:0;right:0;top:100%;z-index:30;background:#fff;border:2px solid var(--ink);border-radius:0 0 12px 12px;max-height:280px;overflow-y:auto;display:none;box-shadow:0 10px 20px rgba(0,0,0,.15)}
+.hint{border-radius:0 0 16px 16px;padding:12px 22px;background:var(--gold-soft);border-top:1px solid #f0d890;font-size:13px;line-height:1.5;color:#5c4600}
+.suggestions{position:absolute;left:-2px;right:-2px;top:100%;z-index:60;background:#fff;border:2px solid var(--ink);border-radius:0 0 16px 16px;max-height:340px;overflow-y:auto;display:none;box-shadow:6px 6px 0 var(--ink)}
 .suggestions.show{display:block}
-.suggestions button{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;padding:10px 20px;border:none;background:#fff;font-size:14px;cursor:pointer;border-bottom:1px solid #eee}
+.suggestions button{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;padding:13px 22px;border:none;background:#fff;font-size:15px;font-weight:500;cursor:pointer;border-bottom:1px solid #eee}
 .suggestions button:hover,.suggestions button:focus{background:var(--gold-soft);outline:none}
-.suggestions .cnt{color:var(--muted);font-size:12px;white-space:nowrap}
+.suggestions .cnt{color:var(--muted);font-size:12px;white-space:nowrap;font-weight:600}
+.sugtitle{padding:8px 22px;background:var(--ink);color:#fff;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
 
 /* results */
 #results-area{padding-top:44px}
@@ -149,7 +150,9 @@ mark{background:#ffe27a;color:inherit;border-radius:3px;padding:0 1px}
 main{flex:1}
 .loadnote{font-size:13px;color:var(--muted);margin-top:14px}
 @media (max-width:640px){
-  .sel{border-left:none;border-top:1px solid var(--line);flex-basis:100%}
+  .sbar{grid-template-columns:1fr}
+  .sel{border-left:none;border-top:1px solid var(--line)}
+  .tab{font-size:11px;letter-spacing:.2px}
   .search{box-shadow:4px 4px 0 var(--ink)}
   .qwrap input{font-size:17px}
   .sortsel{margin-left:0;width:100%}
@@ -167,7 +170,7 @@ main{flex:1}
 <main>
 <div class="wrap">
   <section class="hero">
-    <h1>Know who is in the <mark>room</mark>.</h1>
+    <h1>Find your <mark>Malayalee</mark> Community Medicine Colleague</h1>
     <div class="hero-side">
       <p>This directory exists so Malayali community medicine professionals can find batchmates, seniors, juniors and collaborators across colleges and workplaces.</p>
       <div class="privacy"><b>Please respect privacy.</b> Members shared these details in trust. Use this directory for professional purposes only. Do not copy, scrape, share or use it for unsolicited contact. Phone numbers are never shown.</div>
@@ -176,21 +179,20 @@ main{flex:1}
 
   <section class="search" aria-label="Search the directory">
     <div class="tabs" role="tablist" aria-label="What to search">
-      <button class="tab" role="tab" data-scope="all" aria-selected="true">Everything</button>
-      <button class="tab" role="tab" data-scope="name" aria-selected="false">Name</button>
+      <button class="tab" role="tab" data-scope="name" aria-selected="true">Name</button>
       <button class="tab" role="tab" data-scope="college" aria-selected="false">College</button>
       <button class="tab" role="tab" data-scope="org" aria-selected="false">Organization</button>
     </div>
     <div class="sbar">
       <div class="qwrap">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16181a" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-        <input id="q" type="text" autocomplete="off" aria-label="Search" placeholder="Search by name, college, organization…">
-        <div class="suggestions" id="suggestions"></div>
+        <input id="q" type="text" autocomplete="off" aria-label="Search" placeholder="Type a name">
       </div>
-      <div class="sel"><select id="district" aria-label="Native district"><option value="">All districts</option></select></div>
+      <div class="sel"><select id="district" aria-label="Native district"><option value="">District: all</option></select></div>
       <div class="sel"><input id="interest" type="text" aria-label="Area of interest" placeholder="Area of interest" autocomplete="off"></div>
+      <div class="suggestions" id="suggestions"></div>
     </div>
-    <div class="hint" id="hint">Members spelled college names in different ways. Try <b>GMC</b>, <b>Govt Medical College</b> or the city name, such as <b>Trivandrum</b> or <b>Thiruvananthapuram</b>.</div>
+    <div class="hint" id="hint" style="display:none">Members spelled college names in different ways. Try <b>GMC</b>, <b>Govt Medical College</b> or the city name, such as <b>Trivandrum</b> or <b>Thiruvananthapuram</b>.</div>
   </section>
 
   <div class="loadnote" id="loadnote">Loading directory…</div>
@@ -296,7 +298,7 @@ function statusInfo(r) {
 }
 
 /* ---------- state ---------- */
-var S = { scope: 'all', view: 'cards', sortKey: 'name', sortDir: 1, page: 1, revealed: {} };
+var S = { scope: 'name', view: 'cards', sortKey: 'name', sortDir: 1, page: 1, revealed: {} };
 var RECORDS = [], SUGGEST = { college: [], org: [] }, CURRENT = [];
 var $ = function (id) { return document.getElementById(id); };
 
@@ -323,8 +325,7 @@ function matchRecord(r, toks) {
     ['organization', 'designation'].forEach(function (k) { if (hasAll(r[k], toks)) { hits[k] = true; a2 = true; } });
     return a2 ? hits : null;
   }
-  var all = [r.name, r.ug_college, r.pg_college, r.organization, r.designation, r.native_district, r.interests].join(' ');
-  return hasAll(all, toks) ? { all: true } : null;
+  return null;
 }
 
 function sortValue(r, key) { return (r[key] || '').toLowerCase(); }
@@ -363,7 +364,7 @@ function cardHtml(item, toks) {
   var r = item.r, st = statusInfo(r), id = item.id, college = S.scope === 'college' && toks.length > 0;
   var open = !!S.revealed[id];
   return '<article class="card"><div><div class="cname">' + hl(r.name, S.scope === 'name' ? toks : []) + '</div>' +
-    '<div class="cmeta"><span>' + hl(r.native_district || 'District not given', S.scope === 'all' ? toks : []) + '</span>' +
+    '<div class="cmeta"><span>' + hl(r.native_district || 'District not given', []) + '</span>' +
     (st.text ? '<span class="chip ' + st.cls + '">' + esc(st.text) + '</span>' : '') + '</div></div>' +
     '<div class="rows">' + levelRows(r, item.hits, toks, college) + '</div>' +
     (open ? '<div class="emailbox">' + emailHtml(r) + '</div>' : '') +
@@ -386,7 +387,7 @@ function tableHtml(items, toks) {
     var r = it.r, id = it.id, h = it.hits;
     function cell(k, extra) {
       var dim = college && (k === 'ug_college' || k === 'pg_college' || k === 'organization') && !h[k];
-      var hlOn = (S.scope === 'college' && h[k]) || (S.scope === 'org' && h[k]) || (S.scope === 'all') || (S.scope === 'name' && k === 'name');
+      var hlOn = (S.scope === 'college' && h[k]) || (S.scope === 'org' && h[k]) || false || (S.scope === 'name' && k === 'name');
       return '<td class="' + (extra || '') + (dim ? ' dimcell' : '') + '">' + (hlOn ? hl(r[k], toks) : esc(r[k])) + '</td>';
     }
     var open = !!S.revealed[id];
@@ -486,14 +487,14 @@ function closeDetail() { $('overlay').classList.remove('show'); }
 
 /* ---------- events ---------- */
 var PLACEHOLDERS = {
-  all: 'Search by name, college, organization…', name: 'Type a name', college: 'e.g. Kottayam, JIPMER, Amala, Government Medical College', org: 'Organization or designation'
+  name: 'Type a name', college: 'e.g. Kottayam, JIPMER, Amala, Government Medical College', org: 'Organization or designation'
 };
 document.querySelector('.tabs').addEventListener('click', function (e) {
   var b = e.target.closest('.tab'); if (!b) return;
   S.scope = b.getAttribute('data-scope');
   document.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', t === b ? 'true' : 'false'); });
   $('q').placeholder = PLACEHOLDERS[S.scope];
-  $('hint').style.display = (S.scope === 'college' || S.scope === 'all') ? '' : 'none';
+  $('hint').style.display = S.scope === 'college' ? '' : 'none';
   showSuggest(); render(true);
 });
 $('q').addEventListener('input', function () { showSuggest(); render(true); });
