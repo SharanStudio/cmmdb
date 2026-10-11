@@ -4,509 +4,544 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Community Medicine Malayalis Directory</title>
+<meta name="description" content="A members directory for Malayali community medicine professionals. For professional use only.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --primary-green: #1b5e20;
-  --light-green: #2e7d32;
-  --yellow: #ffc107;
-  --white: #ffffff;
-  --gray-light: #f5f5f5;
-  --text-dark: #1a1a1a;
-  --text-light: #555;
+:root{
+  --ink:#16181a; --paper:#fbfbf8; --white:#fff; --line:#d6d8d3; --muted:#5a6066;
+  --gold:#f0a500; --gold-soft:#fff7e0; --green:#0b6b3a; --green-soft:#eef6ef; --blue:#1a4f9c; --amber:#a67600;
+  --display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif; --body:'Figtree','Segoe UI',system-ui,sans-serif;
 }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--green)}
+button,input,select{font-family:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,64px)}
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #f0f9f5 0%, #e8f5e9 100%);
-  color: var(--text-dark);
-  padding: 20px;
-  line-height: 1.6;
-  min-height: 100vh;
-}
+/* masthead */
+.mast{border-bottom:2px solid var(--ink)}
+.mast .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:20px;padding-bottom:20px}
+.logo{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.3px}
+.logo span{color:var(--gold)}
+.mast-title{font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;text-align:right}
 
-.container { max-width: 1000px; margin: 0 auto; }
+/* hero */
+.hero{display:flex;flex-wrap:wrap;gap:32px 48px;align-items:flex-end;padding:clamp(32px,6vw,56px) 0 clamp(24px,4vw,40px)}
+.hero h1{flex:1 1 520px;font-family:var(--display);font-weight:800;font-size:clamp(44px,8.4vw,88px);line-height:.95;letter-spacing:-.035em}
+.hero h1 mark{background:var(--gold);color:var(--ink);padding:0 .15em;border-radius:8px}
+.hero-side{flex:1 1 320px;min-width:0}
+.hero-side p{font-size:17px;line-height:1.6;color:#3b4146;margin-bottom:14px}
+.privacy{padding:14px 16px;border-radius:12px;background:var(--green-soft);border:1px solid #cfe5d3;font-size:13px;line-height:1.55;color:#1f4a2c}
 
-.header-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-header { flex: 1; text-align: center; }
-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 0.5rem; color: var(--primary-green); }
-header p { font-size: 14px; color: var(--text-light); }
+/* search box */
+.search{border:2px solid var(--ink);border-radius:18px;background:var(--white);box-shadow:6px 6px 0 var(--ink);overflow:hidden}
+.tabs{display:flex;flex-wrap:wrap;border-bottom:2px solid var(--ink)}
+.tab{flex:1 1 120px;padding:13px 8px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:var(--white);border:none;border-right:1px solid var(--ink);cursor:pointer}
+.tab:last-child{border-right:none}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff}
+.tab:hover:not([aria-selected="true"]){background:var(--gold-soft)}
+.sbar{display:flex;flex-wrap:wrap;align-items:stretch}
+.qwrap{flex:3 1 380px;position:relative;display:flex;align-items:center;gap:14px;padding:0 22px;min-height:72px}
+.qwrap svg{flex:none}
+.qwrap input{flex:1;min-width:0;border:none;background:none;font-size:20px;font-weight:600;padding:20px 0;outline:none}
+.qwrap input::placeholder{color:#9aa0a5;font-weight:500}
+.qwrap:focus-within{background:#fffdf4}
+.sel{flex:1 1 180px;border-left:1px solid var(--line);display:flex;align-items:center}
+.sel select,.sel input{width:100%;height:100%;min-height:72px;border:none;background:none;padding:0 20px;font-size:14px;color:var(--muted);outline:none}
+.sel select:focus,.sel input:focus{background:#fffdf4}
+.hint{padding:12px 22px;background:var(--gold-soft);border-top:1px solid #f0d890;font-size:13px;line-height:1.5;color:#5c4600}
+.suggestions{position:absolute;left:0;right:0;top:100%;z-index:30;background:#fff;border:2px solid var(--ink);border-radius:0 0 12px 12px;max-height:280px;overflow-y:auto;display:none;box-shadow:0 10px 20px rgba(0,0,0,.15)}
+.suggestions.show{display:block}
+.suggestions button{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;padding:10px 20px;border:none;background:#fff;font-size:14px;cursor:pointer;border-bottom:1px solid #eee}
+.suggestions button:hover,.suggestions button:focus{background:var(--gold-soft);outline:none}
+.suggestions .cnt{color:var(--muted);font-size:12px;white-space:nowrap}
 
-.settings-btn {
-  width: 48px; height: 48px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-  border: 2px solid var(--yellow); color: white; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; font-size: 20px;
-  transition: all 0.3s; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
-}
-.settings-btn:hover { transform: rotate(20deg) scale(1.1); box-shadow: 0 6px 16px rgba(255, 193, 7, 0.4); }
+/* results */
+#results-area{padding-top:44px}
+.rhead{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;margin-bottom:14px}
+.rcount{font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:-.5px}
+.rsub{font-size:13px;font-weight:700}
+.rsub .ug{color:var(--blue)} .rsub .pg{color:var(--green)} .rsub .wk{color:var(--amber)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-top:2px solid var(--ink);padding-top:14px;margin-bottom:20px}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.seg button{padding:8px 16px;font-size:13px;font-weight:700;border:none;background:#fff;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.sortsel{display:flex;align-items:center;gap:8px;margin-left:auto;font-size:13px;font-weight:600}
+.sortsel select{padding:8px 12px;border:2px solid var(--ink);border-radius:999px;background:#fff;font-size:13px;font-weight:600}
+.dirbtn{padding:8px 12px;border:2px solid var(--ink);border-radius:999px;background:#fff;font-size:13px;font-weight:700;cursor:pointer}
 
-.detail-btn { background: none; border: none; color: var(--yellow); cursor: pointer; font-size: 18px; padding: 4px; transition: all 0.3s; }
-.detail-btn:hover { transform: scale(1.3); }
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:20px}
+.card{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:4px 4px 0 var(--ink);transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.cname{font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-.3px;line-height:1.15}
+.cmeta{font-size:13px;color:var(--muted);margin-top:4px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.chip{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;border:1.5px solid currentColor}
+.chip.done{color:var(--green)} .chip.ongoing{color:var(--amber)}
+.rows{display:flex;flex-direction:column;gap:8px}
+.trow{display:flex;gap:10px;align-items:baseline;font-size:13.5px;font-weight:500;line-height:1.4}
+.trow.dim{opacity:.4}
+.tag{flex:0 0 62px;font-size:11px;font-weight:800;letter-spacing:.8px}
+.tag.ug{color:var(--blue)} .tag.pg{color:var(--green)} .tag.wk{color:var(--amber)}
+.tsub{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.cactions{display:flex;gap:8px;margin-top:auto}
+.btn{padding:9px 16px;border:2px solid var(--ink);border-radius:999px;background:#fff;font-size:13px;font-weight:700;cursor:pointer}
+.btn:hover{background:var(--gold-soft)}
+.btn.solid{background:var(--ink);color:#fff}
+.btn.solid:hover{background:#2c3135}
+.emailbox{font-size:13px;font-weight:600;word-break:break-all;padding:10px 12px;background:var(--gold-soft);border:1px solid #f0d890;border-radius:10px}
 
-.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
-.modal.show { display: flex; align-items: center; justify-content: center; }
-.modal-content {
-  background: var(--white); padding: 2rem; border-radius: 12px; border-left: 6px solid var(--yellow);
-  max-width: 400px; width: 90%; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid var(--yellow); padding-bottom: 1rem; }
-.modal-header h2 { font-size: 18px; color: var(--primary-green); }
-.modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--primary-green); }
+/* table */
+.tablewrap{overflow-x:auto;border:2px solid var(--ink);border-radius:14px;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:860px}
+th{position:sticky;top:0;background:var(--ink);color:#fff;text-align:left;padding:0;font-size:11px;letter-spacing:.7px;text-transform:uppercase;white-space:nowrap}
+th button{width:100%;padding:13px 14px;background:none;border:none;color:#fff;font:inherit;text-transform:inherit;letter-spacing:inherit;font-weight:700;text-align:left;cursor:pointer;display:flex;gap:6px;align-items:center}
+th button:hover{background:#2c3135}
+th .arrow{opacity:.35;font-size:10px}
+th[aria-sort="ascending"] .arrow,th[aria-sort="descending"] .arrow{opacity:1;color:var(--gold)}
+th.plain{padding:13px 14px}
+td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:hover{background:#fffdf4}
+td.acts{display:table-cell;white-space:nowrap}
+td.acts .btn{display:block;margin-bottom:6px;padding:6px 14px}
+td.acts .emailbox{margin-bottom:6px;white-space:normal;min-width:180px}
+td.nm{font-weight:700;font-family:var(--display);font-size:15px}
+td.dimcell{opacity:.45}
+td .tsub{margin-top:2px}
 
-.status-item { display: grid; grid-template-columns: auto 1fr; gap: 12px; margin-bottom: 1rem; padding: 1rem; background: var(--gray-light); border-radius: 8px; border-left: 4px solid var(--primary-green); }
-.status-item:last-child { margin-bottom: 0; }
-.status-icon { font-size: 24px; display: flex; align-items: center; }
-.status-info h3 { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--primary-green); margin-bottom: 4px; letter-spacing: 0.5px; }
-.status-info p { font-size: 14px; font-weight: 600; margin: 0; }
-.status-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ffa500; margin-right: 6px; }
-.status-indicator.connected { background: #4CAF50; }
-.status-indicator.error { background: #f44336; }
+mark{background:#ffe27a;color:inherit;border-radius:3px;padding:0 1px}
+.empty{padding:48px 20px;text-align:center;border:2px dashed var(--ink);border-radius:16px;background:#fff;color:var(--muted)}
+.empty b{display:block;font-family:var(--display);font-size:22px;color:var(--ink);margin-bottom:6px}
 
-.search-section { background: var(--white); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.1); margin-bottom: 2rem; border-top: 4px solid var(--yellow); }
-.search-title { font-size: 16px; font-weight: 700; color: var(--primary-green); margin-bottom: 1.5rem; }
-.search-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-label { font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--primary-green); display: block; margin-bottom: 8px; letter-spacing: 0.5px; }
-input[type="text"], select {
-  width: 100%; padding: 12px 14px; border: 2px solid var(--primary-green); border-radius: 8px;
-  font-size: 14px; background: var(--white); color: var(--text-dark);
-}
-input[type="text"]:focus, select:focus { outline: none; border-color: var(--yellow); box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.2); background: #fffef5; }
+/* pagination */
+.pager{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding:30px 0 4px}
+.pshow{font-size:13px;color:var(--muted)}
+.pnav{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.pbtn{min-width:38px;height:38px;padding:0 10px;border-radius:999px;border:2px solid transparent;background:none;font-size:14px;font-weight:600;cursor:pointer}
+.pbtn:hover:not(:disabled):not([aria-current]){border-color:var(--ink)}
+.pbtn[aria-current="page"]{background:var(--ink);color:#fff}
+.pbtn.wide{border-color:var(--ink);font-weight:700;padding:0 16px}
+.pbtn:disabled{color:#9aa0a5;cursor:default;border-color:transparent}
+.pdots{padding:0 4px;color:var(--muted)}
 
-.view-toggle { position: fixed; right: 20px; top: 100px; display: flex; flex-direction: column; gap: 8px; z-index: 100; }
-.view-btn {
-  width: 50px; height: 50px; border: 2px solid var(--primary-green); background: var(--white); color: var(--primary-green);
-  border-radius: 50%; cursor: pointer; font-size: 20px; transition: all 0.3s;
-  display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.2);
-}
-.view-btn.active { background: linear-gradient(135deg, var(--primary-green), var(--light-green)); border-color: var(--yellow); transform: scale(1.15); }
-.view-btn:hover:not(.active) { border-color: var(--yellow); transform: scale(1.1); }
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(22,24,26,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.overlay.show{display:flex}
+.modal{background:#fff;border:2px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 var(--ink);max-width:560px;width:100%;max-height:90vh;overflow-y:auto;padding:26px}
+.mhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px;padding-bottom:14px;border-bottom:2px solid var(--ink)}
+.mhead h2{font-family:var(--display);font-size:26px;line-height:1.1;letter-spacing:-.4px}
+.mclose{width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);background:#fff;font-size:18px;cursor:pointer;flex:none}
+.msec{margin-bottom:16px}
+.msec h3{font-size:11px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.msec p{font-size:14.5px;font-weight:500}
+.itags{display:flex;flex-wrap:wrap;gap:6px}
+.itag{padding:3px 10px;border:1.5px solid var(--ink);border-radius:999px;font-size:12px;font-weight:600}
 
-.stats { font-size: 14px; color: var(--primary-green); margin-bottom: 1.5rem; padding: 1rem; background: linear-gradient(135deg, rgba(27, 94, 32, 0.05), rgba(255, 193, 7, 0.05)); border-left: 4px solid var(--yellow); border-radius: 6px; font-weight: 700; }
-
-.directory-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-.card { background: var(--white); border: 2px solid var(--primary-green); border-radius: 10px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.1); transition: all 0.3s; position: relative; overflow: hidden; }
-.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--light-green), var(--yellow)); }
-.card:hover { transform: translateY(-8px); box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3); border-color: var(--yellow); }
-.card-header { margin-bottom: 1rem; }
-.card-name { font-size: 16px; font-weight: 700; color: var(--primary-green); margin-bottom: 0.5rem; }
-.card-status { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-.card-status.completed { background: rgba(46, 125, 50, 0.2); color: var(--light-green); border: 1px solid var(--light-green); }
-.card-status.ongoing { background: rgba(255, 193, 7, 0.2); color: #cc9a00; border: 1px solid #cc9a00; }
-.card-body { display: grid; gap: 0.75rem; margin-bottom: 1rem; font-size: 13px; }
-.card-row { display: flex; gap: 8px; align-items: flex-start; }
-.card-icon { color: var(--yellow); font-size: 18px; min-width: 20px; }
-.card-content { flex: 1; }
-.card-label { color: var(--text-light); font-size: 11px; font-weight: 700; text-transform: uppercase; }
-.card-value { font-weight: 600; }
-
-.interests-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 1rem 0; }
-.interest-tag { padding: 4px 10px; background: rgba(27, 94, 32, 0.1); color: var(--primary-green); border: 1px solid var(--primary-green); border-radius: 4px; font-size: 11px; font-weight: 600; }
-
-.contact-btn {
-  width: 100%; padding: 11px; background: linear-gradient(135deg, var(--primary-green), var(--light-green)); color: white;
-  border: none; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.3s;
-  text-transform: uppercase; letter-spacing: 0.5px;
-}
-.contact-btn:hover { transform: scale(1.02); box-shadow: 0 4px 12px rgba(27, 94, 32, 0.4); }
-.contact-btn.show { background: linear-gradient(135deg, var(--yellow), #ffb300); color: var(--primary-green); }
-
-.contact-info { display: none; background: linear-gradient(135deg, rgba(27, 94, 32, 0.05), rgba(255, 193, 7, 0.05)); padding: 12px; border-radius: 6px; margin-top: 12px; border: 2px solid var(--yellow); }
-.contact-info.show { display: block; }
-.contact-line { display: flex; gap: 8px; font-size: 12px; }
-.contact-text { word-break: break-all; font-weight: 500; }
-.contact-text a { color: var(--primary-green); }
-
-.table-container { display: none; overflow-x: auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(27, 94, 32, 0.1); }
-table { width: 100%; border-collapse: collapse; background: var(--white); font-size: 13px; }
-thead { background: linear-gradient(135deg, var(--primary-green), var(--light-green)); }
-th { padding: 12px; text-align: left; font-weight: 700; color: #fff; border-bottom: 3px solid var(--yellow); text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; cursor: pointer; }
-th.nosort { cursor: default; }
-td { padding: 12px; border-bottom: 1px solid #c8e6c9; }
-tr:hover { background: rgba(27, 94, 32, 0.05); }
-.actions-cell { text-align: center; white-space: nowrap; }
-
-.no-results { text-align: center; padding: 3rem; color: var(--text-light); font-size: 14px; background: var(--gray-light); border: 2px dashed var(--primary-green); border-radius: 10px; margin: 2rem 0; }
-.footer-note { text-align: center; font-size: 12px; color: var(--text-light); margin: 1rem 0 2rem; }
-
-.detail-section { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid var(--yellow); }
-.detail-section:last-child { border-bottom: none; margin-bottom: 0; }
-.detail-section h3 { color: var(--primary-green); font-size: 14px; font-weight: 700; margin-bottom: 0.5rem; }
-.detail-section p { margin: 0.5rem 0; font-size: 14px; }
-
-@media (max-width: 768px) {
-  .search-row { grid-template-columns: 1fr; }
-  .view-toggle { position: static; flex-direction: row; margin-bottom: 1.5rem; padding: 1rem; background: var(--gray-light); border-radius: 8px; border: 2px solid var(--primary-green); }
-  .view-btn { flex: 1; width: auto; height: auto; padding: 10px; border-radius: 6px; }
-}
-@media (max-width: 640px) {
-  header h1 { font-size: 24px; }
-  .directory-cards { grid-template-columns: 1fr; }
-  table { font-size: 12px; }
-  th, td { padding: 8px; }
-  .header-wrapper { flex-direction: column; gap: 1rem; }
+/* footer */
+.foot{margin-top:56px;background:var(--ink);color:#d7dad6}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding-top:28px;padding-bottom:28px;font-size:13px}
+.foot b{color:#fff}
+.foot .in{color:var(--gold);font-weight:700}
+main{flex:1}
+.loadnote{font-size:13px;color:var(--muted);margin-top:14px}
+@media (max-width:640px){
+  .sel{border-left:none;border-top:1px solid var(--line);flex-basis:100%}
+  .search{box-shadow:4px 4px 0 var(--ink)}
+  .qwrap input{font-size:17px}
+  .sortsel{margin-left:0;width:100%}
+  .mast-title{display:none}
 }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header-wrapper">
-    <header>
-      <h1>🏥 Community Medicine Malayalis</h1>
-      <p>Member directory with search and filters</p>
-      <a href="colleges.html" style="display:inline-block;margin-top:.5rem;font-size:13px;font-weight:700;color:#1b5e20;text-decoration:none;border-bottom:2px solid #ffc107;">🎓 Search by college</a>
-    </header>
-    <button class="settings-btn" id="settingsBtn" title="Database status">⚙️</button>
-  </div>
+<header class="mast"><div class="wrap">
+  <div class="logo">CMM<span>.</span></div>
+  <div class="mast-title">Community Medicine Malayalis</div>
+</div></header>
 
-  <div id="settingsModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Database Status</h2>
-        <button class="modal-close" data-close="settingsModal">✕</button>
+<main>
+<div class="wrap">
+  <section class="hero">
+    <h1>Know who is in the <mark>room</mark>.</h1>
+    <div class="hero-side">
+      <p>This directory exists so Malayali community medicine professionals can find batchmates, seniors, juniors and collaborators across colleges and workplaces.</p>
+      <div class="privacy"><b>Please respect privacy.</b> Members shared these details in trust. Use this directory for professional purposes only. Do not copy, scrape, share or use it for unsolicited contact. Phone numbers are never shown.</div>
+    </div>
+  </section>
+
+  <section class="search" aria-label="Search the directory">
+    <div class="tabs" role="tablist" aria-label="What to search">
+      <button class="tab" role="tab" data-scope="all" aria-selected="true">Everything</button>
+      <button class="tab" role="tab" data-scope="name" aria-selected="false">Name</button>
+      <button class="tab" role="tab" data-scope="college" aria-selected="false">College</button>
+      <button class="tab" role="tab" data-scope="org" aria-selected="false">Organization</button>
+    </div>
+    <div class="sbar">
+      <div class="qwrap">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16181a" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <input id="q" type="text" autocomplete="off" aria-label="Search" placeholder="Search by name, college, organization…">
+        <div class="suggestions" id="suggestions"></div>
       </div>
-      <div class="status-item">
-        <div class="status-icon">📡</div>
-        <div class="status-info"><h3>Connection Status</h3>
-          <p><span class="status-indicator" id="statusIndicator"></span><span id="statusText">Connecting...</span></p></div>
+      <div class="sel"><select id="district" aria-label="Native district"><option value="">All districts</option></select></div>
+      <div class="sel"><input id="interest" type="text" aria-label="Area of interest" placeholder="Area of interest" autocomplete="off"></div>
+    </div>
+    <div class="hint" id="hint">Members spelled college names in different ways. Try <b>GMC</b>, <b>Govt Medical College</b> or the city name, such as <b>Trivandrum</b> or <b>Thiruvananthapuram</b>.</div>
+  </section>
+
+  <div class="loadnote" id="loadnote">Loading directory…</div>
+
+  <section id="results-area" hidden>
+    <div class="rhead">
+      <div class="rcount" id="rcount"></div>
+      <div class="rsub" id="rsub"></div>
+    </div>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="View">
+        <button id="vCards" aria-pressed="true">Cards</button>
+        <button id="vTable" aria-pressed="false">Table</button>
       </div>
-      <div class="status-item">
-        <div class="status-icon">👥</div>
-        <div class="status-info"><h3>Total Members</h3><p id="totalRecords">0</p></div>
-      </div>
-      <div class="status-item">
-        <div class="status-icon">💾</div>
-        <div class="status-info"><h3>Data Size</h3><p><span id="csvSize">0</span> KB</p></div>
-      </div>
-      <div class="status-item">
-        <div class="status-icon">🕐</div>
-        <div class="status-info"><h3>Loaded At</h3><p id="lastUpdated">—</p></div>
+      <div class="sortsel"><label for="sortKey">Sort by</label>
+        <select id="sortKey">
+          <option value="name">Name</option>
+          <option value="native_district">District</option>
+          <option value="professional_status">Status</option>
+          <option value="ug_college">UG college</option>
+          <option value="pg_college">PG college</option>
+          <option value="organization">Organization</option>
+          <option value="designation">Designation</option>
+        </select>
+        <button class="dirbtn" id="sortDir" aria-label="Toggle sort direction">A → Z</button>
       </div>
     </div>
+    <div id="out" aria-live="polite"></div>
+    <nav class="pager" id="pager" aria-label="Pages"></nav>
+  </section>
+</div>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <div>Developed at <b>smstudio</b> &nbsp;·&nbsp; © 2026</div>
+  <div class="in">Proudly made in India</div>
+</div></footer>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="mname">
+  <div class="modal">
+    <div class="mhead"><h2 id="mname"></h2><button class="mclose" id="mclose" aria-label="Close">✕</button></div>
+    <div id="mbody"></div>
   </div>
-
-  <div id="detailModal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-      <div class="modal-header">
-        <h2 id="detailName">Member Details</h2>
-        <button class="modal-close" data-close="detailModal">✕</button>
-      </div>
-      <div id="detailContent" style="max-height: 70vh; overflow-y: auto;"></div>
-    </div>
-  </div>
-
-  <div class="search-section">
-    <div class="search-title">🔎 Search &amp; Filter Directory</div>
-    <div class="search-row">
-      <div>
-        <label for="searchInput">Search by name or organization</label>
-        <input type="text" id="searchInput" placeholder="E.g., Daniel Kumar or Medical College">
-      </div>
-      <div>
-        <label for="districtFilter">Filter by native district</label>
-        <select id="districtFilter"><option value="">All Districts</option></select>
-      </div>
-    </div>
-    <div>
-      <label for="interestFilter">Filter by areas of interest</label>
-      <input type="text" id="interestFilter" placeholder="E.g., NCD, Hospital Administration, Epidemiology">
-    </div>
-  </div>
-
-  <div class="view-toggle">
-    <button class="view-btn active" id="cardViewBtn" title="Card view">📇</button>
-    <button class="view-btn" id="tableViewBtn" title="Table view">📊</button>
-  </div>
-
-  <div class="stats"><span id="resultCount">Loading directory...</span></div>
-
-  <div class="directory-cards" id="directoryCards"></div>
-
-  <div class="table-container" id="tableContainer">
-    <table>
-      <thead>
-        <tr>
-          <th data-sort="name">Name ↕</th>
-          <th data-sort="native_district">District ↕</th>
-          <th data-sort="professional_status">Status ↕</th>
-          <th data-sort="designation">Designation ↕</th>
-          <th data-sort="organization">Organization ↕</th>
-          <th class="nosort">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-
-  <p class="footer-note">Phone numbers are not shown in this directory.</p>
 </div>
 
 <script>
-// The CSV sits in the same folder as this page.
-const CSV_URL = 'directory.csv';
-const EMAIL_RE = /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']+$/;
+var CSV_URL = 'directory.csv';
+var PAGE_SIZE = 20;
+var EMAIL_RE = /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']+$/;
 
-let allData = [];
-let filteredData = [];
-let currentView = 'card';
-let sortField = 'name';
-let sortAsc = true;
-
-const $ = (id) => document.getElementById(id);
-
-function escapeHtml(text) {
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-  return String(text == null ? '' : text).replace(/[&<>"']/g, (m) => map[m]);
-}
-
-// Reads the whole CSV text, handles quoted commas and line breaks inside cells.
+/* ---------- CSV ---------- */
 function parseCSV(text) {
-  const rows = [];
-  let row = [], cell = '', inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
+  var rows = [], row = [], cell = '', inQuotes = false;
+  for (var i = 0; i < text.length; i++) {
+    var ch = text[i];
     if (inQuotes) {
-      if (ch === '"') {
-        if (text[i + 1] === '"') { cell += '"'; i++; }
-        else inQuotes = false;
-      } else cell += ch;
+      if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else inQuotes = false; }
+      else cell += ch;
     } else if (ch === '"') inQuotes = true;
     else if (ch === ',') { row.push(cell); cell = ''; }
     else if (ch === '\n' || ch === '\r') {
       if (ch === '\r' && text[i + 1] === '\n') i++;
       row.push(cell); cell = '';
-      if (row.some((c) => c.trim() !== '')) rows.push(row);
+      if (row.some(function (c) { return c.trim() !== ''; })) rows.push(row);
       row = [];
     } else cell += ch;
   }
   row.push(cell);
-  if (row.some((c) => c.trim() !== '')) rows.push(row);
+  if (row.some(function (c) { return c.trim() !== ''; })) rows.push(row);
   return rows;
 }
-
-// Turns rows into records using the header names, so column order does not matter.
 function rowsToRecords(rows) {
   if (rows.length < 2) return [];
-  const header = rows[0].map((h) => h.trim());
-  const records = [];
-  for (let i = 1; i < rows.length; i++) {
-    const rec = {};
-    header.forEach((h, idx) => { rec[h] = (rows[i][idx] || '').trim(); });
-    if (rec.name) records.push(rec);
+  var header = rows[0].map(function (h) { return h.trim(); });
+  var out = [];
+  for (var i = 1; i < rows.length; i++) {
+    var rec = {};
+    header.forEach(function (h, idx) { rec[h] = (rows[i][idx] || '').trim(); });
+    if (rec.name) out.push(rec);
   }
-  return records;
+  return out;
 }
 
-async function loadData() {
-  try {
-    const response = await fetch(CSV_URL + '?t=' + Date.now(), { cache: 'no-store' });
-    if (!response.ok) throw new Error('HTTP ' + response.status);
-    const text = await response.text();
-    $('csvSize').textContent = (text.length / 1024).toFixed(2);
+/* ---------- helpers ---------- */
+function esc(t) {
+  return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+function norm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
+function tokens(q) { var n = norm(q); return n ? n.split(' ') : []; }
+function hasAll(value, toks) { var n = norm(value); return n !== '' && toks.every(function (t) { return n.indexOf(t) !== -1; }); }
+function hl(text, toks) {
+  text = String(text == null ? '' : text);
+  if (!toks.length || !text) return esc(text);
+  var re = new RegExp('(' + toks.map(function (t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|') + ')', 'ig');
+  return text.split(re).map(function (p, i) { return i % 2 ? '<mark>' + esc(p) + '</mark>' : esc(p); }).join('');
+}
+function statusInfo(r) {
+  if (r.professional_status === 'PG Ongoing') return { text: 'PG ongoing', cls: 'ongoing' };
+  if (r.professional_status === 'Completed PG') return { text: 'PG completed', cls: 'done' };
+  return { text: '', cls: '' };
+}
 
-    allData = rowsToRecords(parseCSV(text));
-    $('totalRecords').textContent = allData.length;
-    $('lastUpdated').textContent = new Date().toLocaleTimeString();
-    $('statusIndicator').classList.add('connected');
-    $('statusText').textContent = 'Connected';
+/* ---------- state ---------- */
+var S = { scope: 'all', view: 'cards', sortKey: 'name', sortDir: 1, page: 1, revealed: {} };
+var RECORDS = [], SUGGEST = { college: [], org: [] }, CURRENT = [];
+var $ = function (id) { return document.getElementById(id); };
 
-    if (allData.length === 0) {
-      $('directoryCards').innerHTML = '<div class="no-results">⚠️ No valid records found.</div>';
-      $('resultCount').textContent = '0 results';
-      return;
+/* ---------- matching ---------- */
+function activeToks() { return tokens($('q').value); }
+function filterActive() { return activeToks().length > 0 || $('district').value !== '' || tokens($('interest').value).length > 0; }
+
+function matchRecord(r, toks) {
+  var hits = {};
+  var d = $('district').value;
+  if (d && r.native_district !== d) return null;
+  var it = tokens($('interest').value);
+  if (it.length && !hasAll(r.interests, it)) return null;
+  if (!toks.length) return hits;
+  var sc = S.scope;
+  if (sc === 'name') { return hasAll(r.name, toks) ? { name: true } : null; }
+  if (sc === 'college') {
+    var any = false;
+    ['ug_college', 'pg_college', 'organization'].forEach(function (k) { if (hasAll(r[k], toks)) { hits[k] = true; any = true; } });
+    return any ? hits : null;
+  }
+  if (sc === 'org') {
+    var a2 = false;
+    ['organization', 'designation'].forEach(function (k) { if (hasAll(r[k], toks)) { hits[k] = true; a2 = true; } });
+    return a2 ? hits : null;
+  }
+  var all = [r.name, r.ug_college, r.pg_college, r.organization, r.designation, r.native_district, r.interests].join(' ');
+  return hasAll(all, toks) ? { all: true } : null;
+}
+
+function sortValue(r, key) { return (r[key] || '').toLowerCase(); }
+function sortRows(rows) {
+  var k = S.sortKey, dir = S.sortDir;
+  return rows.slice().sort(function (a, b) {
+    var x = sortValue(a.r, k), y = sortValue(b.r, k);
+    if (x === '' && y !== '') return 1;
+    if (y === '' && x !== '') return -1;
+    var c = x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' });
+    if (c === 0) c = a.r.name.localeCompare(b.r.name, undefined, { sensitivity: 'base' });
+    return c * dir;
+  });
+}
+
+/* ---------- rendering ---------- */
+function emailHtml(r) {
+  return EMAIL_RE.test(r.email) ? '<a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a>' : 'Email not provided';
+}
+function levelRows(r, hits, toks, college) {
+  var out = [];
+  var rows = [
+    { k: 'ug_college', tag: 'ug', label: 'UG', sub: r.ug_year ? 'Year ' + r.ug_year : '' },
+    { k: 'pg_college', tag: 'pg', label: 'PG', sub: statusInfo(r).text },
+    { k: 'organization', tag: 'wk', label: 'WORKING', sub: r.designation }
+  ];
+  rows.forEach(function (x) {
+    if (!r[x.k]) return;
+    var dim = college && !hits[x.k];
+    out.push('<div class="trow' + (dim ? ' dim' : '') + '"><span class="tag ' + x.tag + '">' + x.label + '</span><span>' + hl(r[x.k], toks) +
+      (x.sub ? '<span class="tsub">' + esc(x.sub) + '</span>' : '') + '</span></div>');
+  });
+  return out.join('');
+}
+function cardHtml(item, toks) {
+  var r = item.r, st = statusInfo(r), id = item.id, college = S.scope === 'college' && toks.length > 0;
+  var open = !!S.revealed[id];
+  return '<article class="card"><div><div class="cname">' + hl(r.name, S.scope === 'name' ? toks : []) + '</div>' +
+    '<div class="cmeta"><span>' + hl(r.native_district || 'District not given', S.scope === 'all' ? toks : []) + '</span>' +
+    (st.text ? '<span class="chip ' + st.cls + '">' + esc(st.text) + '</span>' : '') + '</div></div>' +
+    '<div class="rows">' + levelRows(r, item.hits, toks, college) + '</div>' +
+    (open ? '<div class="emailbox">' + emailHtml(r) + '</div>' : '') +
+    '<div class="cactions"><button class="btn solid" data-act="email" data-id="' + id + '">' + (open ? 'Hide email' : 'Show email') + '</button>' +
+    '<button class="btn" data-act="detail" data-id="' + id + '">Details</button></div></article>';
+}
+var COLS = [
+  { k: 'name', label: 'Name' }, { k: 'native_district', label: 'District' }, { k: 'professional_status', label: 'Status' },
+  { k: 'ug_college', label: 'UG college' }, { k: 'pg_college', label: 'PG college' }, { k: 'organization', label: 'Organization' },
+  { k: 'designation', label: 'Designation' }
+];
+function tableHtml(items, toks) {
+  var college = S.scope === 'college' && toks.length > 0;
+  var head = COLS.map(function (c) {
+    var sorted = S.sortKey === c.k;
+    var aria = sorted ? (S.sortDir === 1 ? 'ascending' : 'descending') : 'none';
+    return '<th scope="col" aria-sort="' + aria + '"><button data-sort="' + c.k + '">' + esc(c.label) + ' <span class="arrow">' + (sorted ? (S.sortDir === 1 ? '▲' : '▼') : '↕') + '</span></button></th>';
+  }).join('') + '<th scope="col" class="plain">Contact</th>';
+  var body = items.map(function (it) {
+    var r = it.r, id = it.id, h = it.hits;
+    function cell(k, extra) {
+      var dim = college && (k === 'ug_college' || k === 'pg_college' || k === 'organization') && !h[k];
+      var hlOn = (S.scope === 'college' && h[k]) || (S.scope === 'org' && h[k]) || (S.scope === 'all') || (S.scope === 'name' && k === 'name');
+      return '<td class="' + (extra || '') + (dim ? ' dimcell' : '') + '">' + (hlOn ? hl(r[k], toks) : esc(r[k])) + '</td>';
     }
-    populateFilters();
-    filterAndRender();
-  } catch (error) {
-    $('statusIndicator').classList.add('error');
-    $('statusText').textContent = 'Error: ' + error.message;
-    $('resultCount').textContent = 'Could not load the directory';
-    $('directoryCards').innerHTML = '<div class="no-results" style="grid-column:1/-1;">❌ Could not load the directory. Please try again later.</div>';
-  }
-}
-
-function populateFilters() {
-  const districts = [...new Set(allData.map((d) => d.native_district).filter(Boolean))].sort();
-  const select = $('districtFilter');
-  districts.forEach((d) => {
-    const option = document.createElement('option');
-    option.value = d;
-    option.textContent = d;
-    select.appendChild(option);
-  });
-}
-
-function sortData() {
-  filteredData.sort((a, b) => {
-    const aVal = String(a[sortField] || '').toLowerCase();
-    const bVal = String(b[sortField] || '').toLowerCase();
-    if (aVal === bVal) return 0;
-    return (aVal > bVal ? 1 : -1) * (sortAsc ? 1 : -1);
-  });
-}
-
-function filterAndRender() {
-  const term = $('searchInput').value.toLowerCase().trim();
-  const district = $('districtFilter').value;
-  const interest = $('interestFilter').value.toLowerCase().trim();
-
-  filteredData = allData.filter((row) =>
-    (!term || row.name.toLowerCase().includes(term) || (row.organization || '').toLowerCase().includes(term)) &&
-    (!district || row.native_district === district) &&
-    (!interest || (row.interests || '').toLowerCase().includes(interest))
-  );
-  sortData();
-
-  $('resultCount').textContent = filteredData.length + ' result' + (filteredData.length !== 1 ? 's' : '');
-  if (currentView === 'card') renderCards(); else renderTable();
-}
-
-function isCompleted(person) {
-  return (person.professional_status || '').toLowerCase().includes('completed');
-}
-
-function emailLink(email) {
-  if (!EMAIL_RE.test(email)) return '<span class="contact-text">Not provided</span>';
-  const safe = escapeHtml(email);
-  return '<span class="contact-text"><a href="mailto:' + safe + '">' + safe + '</a></span>';
-}
-
-function renderCards() {
-  const container = $('directoryCards');
-  if (filteredData.length === 0) {
-    container.innerHTML = '<div class="no-results" style="grid-column: 1/-1;">🔍 No members found matching your criteria.</div>';
-    return;
-  }
-  container.innerHTML = filteredData.map((person, idx) => {
-    const done = isCompleted(person);
-    const interests = (person.interests || '').split(',').map((i) => i.trim()).filter(Boolean);
-    return `
-      <div class="card">
-        <div class="card-header">
-          <div class="card-name">${escapeHtml(person.name)}</div>
-          <span class="card-status ${done ? 'completed' : 'ongoing'}">${done ? 'Completed PG' : 'PG Ongoing'}</span>
-        </div>
-        <div class="card-body">
-          <div class="card-row"><div class="card-icon">📍</div><div class="card-content"><div class="card-label">District</div><div class="card-value">${escapeHtml(person.native_district)}</div></div></div>
-          <div class="card-row"><div class="card-icon">👔</div><div class="card-content"><div class="card-label">Current Designation</div><div class="card-value">${escapeHtml(person.designation)}</div></div></div>
-          <div class="card-row"><div class="card-icon">🏢</div><div class="card-content"><div class="card-label">Organization</div><div class="card-value">${escapeHtml(person.organization)}</div></div></div>
-        </div>
-        ${interests.length ? '<div class="interests-tags">' + interests.map((i) => '<span class="interest-tag">' + escapeHtml(i) + '</span>').join('') + '</div>' : ''}
-        <div style="display:flex; gap:8px;">
-          <button class="contact-btn" style="flex:1;" data-contact="${idx}">Show Email</button>
-          <button class="detail-btn" data-detail="${idx}" title="View full details">👁️</button>
-        </div>
-        <div class="contact-info" id="contact-${idx}">
-          <div class="contact-line"><span>📧</span>${emailLink(person.email)}</div>
-        </div>
-      </div>`;
+    var open = !!S.revealed[id];
+    return '<tr>' + cell('name', 'nm') + cell('native_district') +
+      '<td>' + esc(statusInfo(r).text) + '</td>' + cell('ug_college') + cell('pg_college') + cell('organization') + cell('designation') +
+      '<td class="acts">' + (open ? '<div class="emailbox">' + emailHtml(r) + '</div>' : '<button class="btn" data-act="email" data-id="' + id + '">Show email</button>') +
+      '<button class="btn" data-act="detail" data-id="' + id + '">Details</button></td></tr>';
   }).join('');
+  return '<div class="tablewrap"><table><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table></div>';
 }
-
-function renderTable() {
-  const tbody = $('tableBody');
-  if (filteredData.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" class="no-results">🔍 No members found</td></tr>';
-    return;
-  }
-  tbody.innerHTML = filteredData.map((person, idx) => {
-    const done = isCompleted(person);
-    return `
-      <tr>
-        <td><strong>${escapeHtml(person.name)}</strong></td>
-        <td>${escapeHtml(person.native_district)}</td>
-        <td><span class="card-status ${done ? 'completed' : 'ongoing'}">${done ? 'Completed' : 'Ongoing'}</span></td>
-        <td>${escapeHtml(person.designation)}</td>
-        <td>${escapeHtml(person.organization)}</td>
-        <td class="actions-cell"><button class="detail-btn" data-detail="${idx}" title="View details and email">👁️</button></td>
-      </tr>`;
+function pagerHtml(total, pages) {
+  if (total <= PAGE_SIZE) return '<div class="pshow">Showing all ' + total + '</div>';
+  var from = (S.page - 1) * PAGE_SIZE + 1, to = Math.min(total, S.page * PAGE_SIZE);
+  var nums = [], p;
+  for (p = 1; p <= pages; p++) { if (p === 1 || p === pages || Math.abs(p - S.page) <= 1) nums.push(p); else if (nums[nums.length - 1] !== '…') nums.push('…'); }
+  var btns = nums.map(function (n) {
+    return n === '…' ? '<span class="pdots">…</span>' :
+      '<button class="pbtn" data-page="' + n + '"' + (n === S.page ? ' aria-current="page"' : '') + ' aria-label="Page ' + n + '">' + n + '</button>';
   }).join('');
+  return '<div class="pshow">Showing ' + from + ' to ' + to + ' of ' + total + '</div><div class="pnav">' +
+    '<button class="pbtn wide" data-page="' + (S.page - 1) + '"' + (S.page === 1 ? ' disabled' : '') + '>Previous</button>' + btns +
+    '<button class="pbtn wide" data-page="' + (S.page + 1) + '"' + (S.page === pages ? ' disabled' : '') + '>Next</button></div>';
 }
 
-function openDetail(idx) {
-  const person = filteredData[idx];
-  if (!person) return;
-  const ongoing = !isCompleted(person);
-  $('detailName').textContent = person.name;
-  $('detailContent').innerHTML = `
-    <div class="detail-section">
-      <h3>Basic Information</h3>
-      <p><strong>District:</strong> ${escapeHtml(person.native_district)}</p>
-      <p><strong>Current Status:</strong> ${escapeHtml(person.professional_status)}</p>
-      <p><strong>Email:</strong> ${emailLink(person.email)}</p>
-    </div>
-    ${ongoing ? '' : `
-    <div class="detail-section">
-      <h3>Current Position</h3>
-      <p><strong>Designation:</strong> ${escapeHtml(person.designation || 'N/A')}</p>
-      <p><strong>Organization:</strong> ${escapeHtml(person.organization || 'N/A')}</p>
-    </div>`}
-    <div class="detail-section">
-      <h3>🎓 Undergraduate (MBBS)</h3>
-      <p><strong>College:</strong> ${escapeHtml(person.ug_college || 'N/A')}</p>
-      <p><strong>State:</strong> ${escapeHtml(person.ug_state || 'N/A')}</p>
-      <p><strong>Year of Passing:</strong> ${escapeHtml(person.ug_year || 'N/A')}</p>
-    </div>
-    <div class="detail-section">
-      <h3>📚 Postgraduate (MD/MPH)</h3>
-      <p><strong>College:</strong> ${escapeHtml(person.pg_college || 'N/A')}</p>
-      <p><strong>State:</strong> ${escapeHtml(person.pg_state || 'N/A')}</p>
-      <p><strong>Year of Passing / Expected:</strong> ${escapeHtml(person.md_completion_year || person.pg_completion_expected || 'N/A')}</p>
-    </div>
-    ${person.interests ? `
-    <div class="detail-section">
-      <h3>💡 Areas of Interest</h3>
-      <p>${escapeHtml(person.interests)}</p>
-    </div>` : ''}`;
-  $('detailModal').classList.add('show');
-}
-
-function switchView(view) {
-  currentView = view;
-  $('cardViewBtn').classList.toggle('active', view === 'card');
-  $('tableViewBtn').classList.toggle('active', view === 'table');
-  $('directoryCards').style.display = view === 'card' ? 'grid' : 'none';
-  $('tableContainer').style.display = view === 'table' ? 'block' : 'none';
-  filterAndRender();
-}
-
-// ---- Events (no inline handlers, so no member data ever sits inside an onclick) ----
-$('searchInput').addEventListener('input', filterAndRender);
-$('districtFilter').addEventListener('change', filterAndRender);
-$('interestFilter').addEventListener('input', filterAndRender);
-$('cardViewBtn').addEventListener('click', () => switchView('card'));
-$('tableViewBtn').addEventListener('click', () => switchView('table'));
-$('settingsBtn').addEventListener('click', () => $('settingsModal').classList.add('show'));
-
-document.addEventListener('click', (e) => {
-  const closeBtn = e.target.closest('[data-close]');
-  if (closeBtn) { $(closeBtn.dataset.close).classList.remove('show'); return; }
-  if (e.target.classList.contains('modal')) { e.target.classList.remove('show'); return; }
-
-  const detailBtn = e.target.closest('[data-detail]');
-  if (detailBtn) { openDetail(Number(detailBtn.dataset.detail)); return; }
-
-  const contactBtn = e.target.closest('[data-contact]');
-  if (contactBtn) {
-    const box = $('contact-' + contactBtn.dataset.contact);
-    const shown = box.classList.toggle('show');
-    contactBtn.classList.toggle('show', shown);
-    contactBtn.textContent = shown ? 'Hide Email' : 'Show Email';
-    return;
+function render(resetPage) {
+  if (resetPage) S.page = 1;
+  var area = $('results-area');
+  if (!filterActive()) { area.hidden = true; CURRENT = []; return; }
+  var toks = activeToks();
+  var items = [];
+  RECORDS.forEach(function (r, i) { var h = matchRecord(r, toks); if (h) items.push({ r: r, id: i, hits: h }); });
+  items = sortRows(items);
+  CURRENT = items;
+  area.hidden = false;
+  var total = items.length, pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (S.page > pages) S.page = pages;
+  var c = { ug: 0, pg: 0, wk: 0 };
+  if (S.scope === 'college' && toks.length) {
+    items.forEach(function (it) { if (it.hits.ug_college) c.ug++; if (it.hits.pg_college) c.pg++; if (it.hits.organization) c.wk++; });
+    $('rsub').innerHTML = '<span class="ug">UG ' + c.ug + '</span> &nbsp;/&nbsp; <span class="pg">PG ' + c.pg + '</span> &nbsp;/&nbsp; <span class="wk">Working ' + c.wk + '</span>';
+  } else $('rsub').innerHTML = '';
+  $('rcount').textContent = total + (total === 1 ? ' member found' : ' members found');
+  if (!total) {
+    $('out').innerHTML = '<div class="empty"><b>No members found</b>Try a shorter word, another spelling (GMC, Govt, a city name) or a different tab.</div>';
+    $('pager').innerHTML = ''; return;
   }
+  var slice = items.slice((S.page - 1) * PAGE_SIZE, S.page * PAGE_SIZE);
+  $('out').innerHTML = S.view === 'table' ? tableHtml(slice, toks) : '<div class="cards">' + slice.map(function (it) { return cardHtml(it, toks); }).join('') + '</div>';
+  $('pager').innerHTML = pagerHtml(total, pages);
+  $('sortKey').value = S.sortKey;
+  $('sortDir').textContent = S.sortDir === 1 ? 'A → Z' : 'Z → A';
+}
 
-  const th = e.target.closest('th[data-sort]');
-  if (th) {
-    const field = th.dataset.sort;
-    if (sortField === field) sortAsc = !sortAsc; else { sortField = field; sortAsc = true; }
-    filterAndRender();
-  }
+/* ---------- suggestions ---------- */
+function buildSuggest(fields) {
+  var map = {};
+  RECORDS.forEach(function (r) {
+    fields.forEach(function (f) {
+      var raw = r[f]; var k = norm(raw); if (!k) return;
+      if (map[k]) map[k].count++; else map[k] = { display: raw, key: k, count: 1 };
+    });
+  });
+  return Object.keys(map).map(function (k) { return map[k]; });
+}
+function showSuggest() {
+  var box = $('suggestions'), toks = activeToks();
+  var pool = S.scope === 'college' ? SUGGEST.college : S.scope === 'org' ? SUGGEST.org : [];
+  if (!toks.length || !pool.length) { box.classList.remove('show'); box.innerHTML = ''; return; }
+  var list = pool.filter(function (s) { return toks.every(function (t) { return s.key.indexOf(t) !== -1; }); })
+    .sort(function (a, b) { return b.count - a.count || a.display.localeCompare(b.display); }).slice(0, 8);
+  if (!list.length) { box.classList.remove('show'); box.innerHTML = ''; return; }
+  box.innerHTML = list.map(function (s) {
+    return '<button type="button" data-fill="' + esc(s.display) + '"><span>' + hl(s.display, toks) + '</span><span class="cnt">' + s.count + (s.count === 1 ? ' mention' : ' mentions') + '</span></button>';
+  }).join('');
+  box.classList.add('show');
+}
+
+/* ---------- details modal ---------- */
+function openDetail(id) {
+  var r = RECORDS[id]; if (!r) return;
+  var st = statusInfo(r), sec = [];
+  function add(h, body) { if (body) sec.push('<div class="msec"><h3>' + esc(h) + '</h3>' + body + '</div>'); }
+  add('Native district', r.native_district ? '<p>' + esc(r.native_district) + '</p>' : '');
+  add('Status', st.text ? '<p>' + esc(st.text) + (r.pg_completion_expected && r.professional_status === 'PG Ongoing' ? ' · expected ' + esc(r.pg_completion_expected) : '') + (r.md_completion_year && r.professional_status === 'Completed PG' ? ' · ' + esc(r.md_completion_year) : '') + '</p>' : '');
+  add('UG', r.ug_college ? '<p>' + esc(r.ug_college) + '</p><p class="tsub">' + esc([r.ug_state, r.ug_year].filter(Boolean).join(' · ')) + '</p>' : '');
+  add('PG', r.pg_college ? '<p>' + esc(r.pg_college) + '</p><p class="tsub">' + esc(r.pg_state) + '</p>' : '');
+  add('Working at', r.organization ? '<p>' + esc(r.organization) + '</p>' + (r.designation ? '<p class="tsub">' + esc(r.designation) + '</p>' : '') : '');
+  var tags = r.interests ? r.interests.split(/[;,|]/).map(function (s) { return s.trim(); }).filter(Boolean) : [];
+  add('Areas of interest', tags.length ? '<div class="itags">' + tags.map(function (t) { return '<span class="itag">' + esc(t) + '</span>'; }).join('') + '</div>' : '');
+  add('Email', '<p>' + emailHtml(r) + '</p>');
+  $('mname').textContent = r.name;
+  $('mbody').innerHTML = sec.join('');
+  $('overlay').classList.add('show');
+  $('mclose').focus();
+}
+function closeDetail() { $('overlay').classList.remove('show'); }
+
+/* ---------- events ---------- */
+var PLACEHOLDERS = {
+  all: 'Search by name, college, organization…', name: 'Type a name', college: 'e.g. Kottayam, JIPMER, Amala, Government Medical College', org: 'Organization or designation'
+};
+document.querySelector('.tabs').addEventListener('click', function (e) {
+  var b = e.target.closest('.tab'); if (!b) return;
+  S.scope = b.getAttribute('data-scope');
+  document.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', t === b ? 'true' : 'false'); });
+  $('q').placeholder = PLACEHOLDERS[S.scope];
+  $('hint').style.display = (S.scope === 'college' || S.scope === 'all') ? '' : 'none';
+  showSuggest(); render(true);
 });
+$('q').addEventListener('input', function () { showSuggest(); render(true); });
+$('q').addEventListener('focus', showSuggest);
+$('district').addEventListener('change', function () { render(true); });
+$('interest').addEventListener('input', function () { render(true); });
+$('suggestions').addEventListener('click', function (e) {
+  var b = e.target.closest('button[data-fill]'); if (!b) return;
+  $('q').value = b.getAttribute('data-fill'); $('suggestions').classList.remove('show'); render(true);
+});
+document.addEventListener('click', function (e) { if (!e.target.closest('.qwrap')) $('suggestions').classList.remove('show'); });
+$('vCards').addEventListener('click', function () { S.view = 'cards'; $('vCards').setAttribute('aria-pressed', 'true'); $('vTable').setAttribute('aria-pressed', 'false'); render(false); });
+$('vTable').addEventListener('click', function () { S.view = 'table'; $('vTable').setAttribute('aria-pressed', 'true'); $('vCards').setAttribute('aria-pressed', 'false'); render(false); });
+$('sortKey').addEventListener('change', function () { S.sortKey = this.value; render(true); });
+$('sortDir').addEventListener('click', function () { S.sortDir *= -1; render(true); });
+$('out').addEventListener('click', function (e) {
+  var s = e.target.closest('[data-sort]');
+  if (s) { var k = s.getAttribute('data-sort'); if (S.sortKey === k) S.sortDir *= -1; else { S.sortKey = k; S.sortDir = 1; } render(true); return; }
+  var b = e.target.closest('[data-act]'); if (!b) return;
+  var id = parseInt(b.getAttribute('data-id'), 10);
+  if (b.getAttribute('data-act') === 'email') { S.revealed[id] = !S.revealed[id]; render(false); }
+  else openDetail(id);
+});
+$('pager').addEventListener('click', function (e) {
+  var b = e.target.closest('[data-page]'); if (!b || b.disabled) return;
+  S.page = parseInt(b.getAttribute('data-page'), 10); render(false);
+  $('results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+$('mclose').addEventListener('click', closeDetail);
+$('overlay').addEventListener('click', function (e) { if (e.target === $('overlay')) closeDetail(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
 
+/* ---------- load ---------- */
+function loadData() {
+  fetch(CSV_URL + '?t=' + Date.now(), { cache: 'no-store' })
+    .then(function (resp) { if (!resp.ok) throw new Error('HTTP ' + resp.status); return resp.text(); })
+    .then(function (text) {
+      RECORDS = rowsToRecords(parseCSV(text));
+      SUGGEST.college = buildSuggest(['ug_college', 'pg_college', 'organization']);
+      SUGGEST.org = buildSuggest(['organization']);
+      var ds = {}; RECORDS.forEach(function (r) { if (r.native_district) ds[r.native_district] = 1; });
+      Object.keys(ds).sort().forEach(function (d) { var o = document.createElement('option'); o.value = d; o.textContent = d; $('district').appendChild(o); });
+      $('loadnote').textContent = RECORDS.length + ' members in the directory.';
+      render(false);
+    })
+    .catch(function (err) { $('loadnote').textContent = 'Could not load the directory (' + err.message + '). Please refresh.'; });
+}
 loadData();
 </script>
-
 </body>
 </html>
