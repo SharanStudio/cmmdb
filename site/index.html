@@ -159,6 +159,21 @@ mark{background:#ffe27a;color:inherit;border-radius:3px;padding:0 1px}
 .foot .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding-top:28px;padding-bottom:28px;font-size:13px}
 .foot b{color:#fff}
 .foot .in{color:var(--gold);font-weight:700}
+.credit-link{background:none;border:0;padding:0;font:inherit;font-weight:700;color:#fff;cursor:pointer;text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px;text-underline-offset:3px}
+.credit-link:hover{color:var(--gold)}
+.credit-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:3px}
+/* credits popup */
+.cgroup{margin-bottom:18px}
+.cgroup:last-child{margin-bottom:0}
+.cgroup h3{font-size:11px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.cperson{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 14px;border:2px solid var(--ink);border-radius:12px;background:var(--gold-soft);margin-bottom:8px}
+.cperson:last-child{margin-bottom:0}
+.cname{font-family:var(--display);font-weight:800;font-size:18px;line-height:1.2}
+.crole{font-size:13px;font-weight:500;color:var(--muted);margin-top:2px}
+.clink{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:2px solid var(--ink);border-radius:999px;background:#fff;color:var(--ink);font-size:12.5px;font-weight:700;text-decoration:none;white-space:nowrap}
+.clink:hover{background:var(--ink);color:#fff}
+.clink svg{width:14px;height:14px;fill:currentColor}
+.cnote{font-size:12px;color:var(--muted);margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
 main{flex:1}
 .loadnote{font-size:13px;color:var(--muted);margin-top:14px}
 @media (max-width:640px){
@@ -242,7 +257,7 @@ main{flex:1}
 </main>
 
 <footer class="foot"><div class="wrap">
-  <div>Developed at <b>smstudio</b> &nbsp;·&nbsp; © 2026 &nbsp;·&nbsp; Anonymous, cookie-free usage statistics &nbsp;·&nbsp; <a href="https://docs.google.com/forms/d/e/1FAIpQLScqlafdQdbwn4M9MFp9jp8qxXYpPZm8fULQ5s_ktDN0arLXPQ/viewform?pli=1" rel="noopener noreferrer" target="_blank" data-join>Join / update your profile</a></div>
+  <div>Developed at <button type="button" class="credit-link" id="creditsBtn" aria-haspopup="dialog" title="Meet the team behind this platform">smstudio</button> &nbsp;·&nbsp; © 2026 &nbsp;·&nbsp; Anonymous, cookie-free usage statistics &nbsp;·&nbsp; <a href="https://docs.google.com/forms/d/e/1FAIpQLScqlafdQdbwn4M9MFp9jp8qxXYpPZm8fULQ5s_ktDN0arLXPQ/viewform?pli=1" rel="noopener noreferrer" target="_blank" data-join>Join / update your profile</a></div>
   <div class="in">Proudly made in India</div>
 </div></footer>
 
@@ -250,6 +265,13 @@ main{flex:1}
   <div class="modal">
     <div class="mhead"><h2 id="mname"></h2><button class="mclose" id="mclose" aria-label="Close">✕</button></div>
     <div id="mbody"></div>
+  </div>
+</div>
+
+<div class="overlay" id="creditsOverlay" role="dialog" aria-modal="true" aria-labelledby="creditsTitle">
+  <div class="modal">
+    <div class="mhead"><h2 id="creditsTitle">Credits</h2><button class="mclose" id="creditsClose" aria-label="Close credits">✕</button></div>
+    <div id="creditsBody"></div>
   </div>
 </div>
 
@@ -515,6 +537,43 @@ function openDetail(id) {
   $('mclose').focus();
 }
 function closeDetail() { $('overlay').classList.remove('show'); }
+
+/* ---------- credits popup ---------- */
+/* Edit this list to update the credits. A person with an empty linkedin value shows no LinkedIn button. */
+var CREDITS = [
+  { group: 'Created and maintained by', people: [
+    { name: 'Dr Sharan Murali', role: 'Scientist C, ICMR – National Institute of Epidemiology', linkedin: '' }
+  ] },
+  { group: 'Platform idea', people: [
+    { name: 'Dr Amal Kareem', role: '', linkedin: '' },
+    { name: 'Dr Salin K Eliyas', role: '', linkedin: '' }
+  ] }
+];
+var LI_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>';
+function safeUrl(u) { return /^https:\/\/([a-z]+\.)?linkedin\.com\//i.test(u || '') ? u : ''; }
+function openCredits() {
+  $('creditsBody').innerHTML = CREDITS.map(function (g) {
+    return '<div class="cgroup"><h3>' + esc(g.group) + '</h3>' + g.people.map(function (p) {
+      var u = safeUrl(p.linkedin);
+      return '<div class="cperson"><div><div class="cname">' + esc(p.name) + '</div>' +
+        (p.role ? '<div class="crole">' + esc(p.role) + '</div>' : '') + '</div>' +
+        (u ? '<a class="clink" href="' + esc(u) + '" target="_blank" rel="noopener noreferrer" aria-label="' + esc(p.name) + ' on LinkedIn">' + LI_ICON + 'LinkedIn</a>' : '') +
+        '</div>';
+    }).join('') + '</div>';
+  }).join('');
+  track('credits-open');
+  $('creditsOverlay').classList.add('show');
+  $('creditsClose').focus();
+}
+function closeCredits() {
+  if (!$('creditsOverlay').classList.contains('show')) return;
+  $('creditsOverlay').classList.remove('show');
+  $('creditsBtn').focus();
+}
+$('creditsBtn').addEventListener('click', openCredits);
+$('creditsClose').addEventListener('click', closeCredits);
+$('creditsOverlay').addEventListener('click', function (e) { if (e.target === $('creditsOverlay')) closeCredits(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeCredits(); });
 
 /* ---------- events ---------- */
 var PLACEHOLDERS = {
