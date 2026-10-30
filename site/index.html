@@ -161,10 +161,22 @@ mark{background:#ffe27a;color:inherit;border-radius:3px;padding:0 1px}
 .itag{padding:3px 10px;border:1.5px solid var(--ink);border-radius:999px;font-size:12px;font-weight:600}
 
 /* footer */
-.foot{margin-top:56px;background:var(--ink);color:#d7dad6}
-.foot .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding-top:28px;padding-bottom:28px;font-size:13px}
-.foot b{color:#fff}
+.foot{margin-top:56px;background:var(--ink);color:#d7dad6;font-size:14px}
+.foot .fcols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;padding-top:40px;padding-bottom:28px}
+.foot .fbrand{font:800 20px var(--display);color:#fff;margin-bottom:8px}
+.foot .fbrand i{font-style:normal;color:var(--gold)}
+.foot .fcols p{max-width:300px;color:#b9bdb8}
+.foot h3{font-size:11px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.foot ul{list-style:none}
+.foot li{margin-bottom:4px}
+.foot .fcols a{display:inline-block;padding:6px 0;color:#d7dad6;text-decoration:none}
+.foot .fcols a:hover,.foot .fcols a:focus-visible{color:var(--gold)}
+.foot .fmid{text-align:center}
+.foot .fright{text-align:right}
+.foot .fbar{border-top:1px solid #2f3336}
+.foot .fbar .wrap{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;align-items:center;padding-top:18px;padding-bottom:22px;font-size:13px;color:#b9bdb8}
 .foot .in{color:var(--gold);font-weight:700}
+@media(max-width:700px){.foot .fcols{grid-template-columns:1fr;gap:26px;padding-top:32px}.foot .fmid,.foot .fright{text-align:left}}
 .credit-link{background:none;border:0;padding:0;font:inherit;font-weight:700;color:#fff;cursor:pointer;text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px;text-underline-offset:3px}
 .credit-link:hover{color:var(--gold)}
 .credit-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:3px}
@@ -262,10 +274,23 @@ main{flex:1}
 </div>
 </main>
 
-<footer class="foot"><div class="wrap">
-  <div>Developed at <button type="button" class="credit-link" id="creditsBtn" aria-haspopup="dialog" title="Meet the team behind this platform">smstudio</button> &nbsp;·&nbsp; © 2026 &nbsp;·&nbsp; <a href="/privacy/">Privacy</a> &nbsp;·&nbsp; <a href="mailto:admincmmonline@gmail.com?subject=Remove%20my%20CMM%20profile&amp;body=Please%20remove%20my%20profile.%0AFull%20name%3A%20%0AEmail%20used%20to%20register%3A%20">Remove my profile</a> &nbsp;·&nbsp; Anonymous, cookie-free usage statistics &nbsp;·&nbsp; <a href="https://docs.google.com/forms/d/e/1FAIpQLScqlafdQdbwn4M9MFp9jp8qxXYpPZm8fULQ5s_ktDN0arLXPQ/viewform?pli=1" rel="noopener noreferrer" target="_blank" data-join>Join / update your profile</a></div>
-  <div class="in">Proudly made in India</div>
-</div></footer>
+<footer class="foot">
+  <div class="wrap fcols">
+    <div><div class="fbrand">CMM <i>Directory</i></div><p>Community Medicine Malayalis. A members directory for professional use only.</p></div>
+    <div class="fmid"><h3>Your data</h3><ul>
+      <li><a href="/privacy/">Privacy notice</a></li>
+      <li><a href="mailto:admincmmonline@gmail.com?subject=Remove%20my%20CMM%20profile&amp;body=Please%20remove%20my%20profile.%0AFull%20name%3A%20%0AEmail%20used%20to%20register%3A%20">Remove my profile</a></li>
+    </ul></div>
+    <div class="fright"><h3>Members</h3><ul>
+      <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScqlafdQdbwn4M9MFp9jp8qxXYpPZm8fULQ5s_ktDN0arLXPQ/viewform?pli=1" rel="noopener noreferrer" target="_blank" data-join>Join / update your profile</a></li>
+      <li><a href="mailto:admincmmonline@gmail.com?subject=CMM%20Directory%20query">Contact the admin</a></li>
+    </ul></div>
+  </div>
+  <div class="fbar"><div class="wrap">
+    <div>Developed by <button type="button" class="credit-link" id="creditsBtn" aria-haspopup="dialog" title="Meet the team behind this platform">SM Studio</button> &nbsp;·&nbsp; © 2026 &nbsp;·&nbsp; Anonymous, cookie-free usage statistics</div>
+    <div class="in">Proudly made in India</div>
+  </div></div>
+</footer>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="mname">
   <div class="modal">
