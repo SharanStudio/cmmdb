@@ -19,6 +19,10 @@
   .card { border:1px solid var(--line); background:var(--soft); border-radius:10px; padding:14px 16px; margin:14px 0; }
   .card p { margin:.2rem 0; }
   .muted { color:var(--muted); font-size:.9rem; }
+  fieldset { border:1px solid var(--line); background:var(--soft); border-radius:10px; padding:12px 16px; margin:14px 0; }
+  legend { font-weight:700; padding:0 6px; }
+  label { display:block; padding:6px 0; cursor:pointer; }
+  input { margin-right:8px; }
   button { font:inherit; font-weight:700; padding:12px 22px; border:0; border-radius:8px; background:var(--gold); color:#16181a; cursor:pointer; }
   button:disabled { opacity:.6; cursor:default; }
   [hidden] { display:none !important; }
@@ -33,6 +37,14 @@
 <main>
   <h1 id="title">Checking your link…</h1>
   <div id="details" class="card" hidden></div>
+  <div id="choice" hidden>
+    <fieldset>
+      <legend>Your email on the directory</legend>
+      <label><input type="radio" name="show" value="hide" checked>Hide my email</label>
+      <label><input type="radio" name="show" value="show">Show my email</label>
+    </fieldset>
+    <label><input type="checkbox" id="consent">I consent to the CMM Directory publishing my profile details on cmmonline.in, as described in the <a href="/privacy/" target="_blank" rel="noopener noreferrer">privacy notice</a>.</label>
+  </div>
   <p id="msg"></p>
   <button id="go" type="button" hidden>Confirm</button>
   <p class="muted">Questions? Write to <a href="mailto:admincmmonline@gmail.com">admincmmonline@gmail.com</a>.</p>
