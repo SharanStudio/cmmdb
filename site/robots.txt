@@ -2,6 +2,7 @@
 User-agent: *
 Disallow: /directory.csv
 Disallow: /register/
+Disallow: /confirm/
 
 # Ask AI-training crawlers not to copy the directory (compliance is voluntary).
 User-agent: GPTBot
