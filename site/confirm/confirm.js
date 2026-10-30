@@ -2,7 +2,7 @@
 // Paste the deployed web-app URL (ends in /exec) below.
 (function () {
   'use strict';
-  var API = 'PASTE_WEB_APP_URL_HERE';
+  var API = 'https://script.google.com/macros/s/AKfycbzasJVPoxyQmEfWHj_FKcxn8x-fcvlVZXZoDwp2VHLI1uidJGPi9qkbw7k5owNfwG3wUw/exec';
 
   var q = new URLSearchParams(location.search);
   var token = q.get('t') || '';
