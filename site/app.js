@@ -264,12 +264,8 @@ function closeDetail() { $('overlay').classList.remove('show'); }
 /* Edit this list to update the credits. A person with an empty linkedin value shows no LinkedIn button. */
 var CREDITS = [
   { group: 'Created and maintained by', people: [
-    { name: 'Dr Sharan Murali', role: 'Scientist C, ICMR – National Institute of Epidemiology', linkedin: 'https://www.linkedin.com/in/drsharanmurali' }
-  ] },
-  { group: 'Platform idea', people: [
-    { name: 'Dr Amal Kareem', role: '', linkedin: 'https://www.linkedin.com/in/dr-amal-kareem-36b134157' },
-    { name: 'Dr Salin K Eliyas', role: '', linkedin: 'https://www.linkedin.com/in/salins13' }
-  ] }
+    { name: 'Dr Sharan Murali', role: '', linkedin: 'https://www.linkedin.com/in/drsharanmurali' }
+  ], note: 'Dr Sharan Murali built this platform in a personal capacity. It is his own work, and it is not an official activity of his employer and has no link with his official workplace or position.' }
 ];
 var LI_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>';
 function safeUrl(u) { return /^https:\/\/([a-z]+\.)?linkedin\.com\//i.test(u || '') ? u : ''; }
@@ -281,7 +277,7 @@ function openCredits() {
         (p.role ? '<div class="crole">' + esc(p.role) + '</div>' : '') + '</div>' +
         (u ? '<a class="clink" href="' + esc(u) + '" target="_blank" rel="noopener noreferrer" aria-label="' + esc(p.name) + ' on LinkedIn">' + LI_ICON + 'LinkedIn</a>' : '') +
         '</div>';
-    }).join('') + '</div>';
+    }).join('') + (g.note ? '<p class="cnote">' + esc(g.note) + '</p>' : '') + '</div>';
   }).join('');
   track('credits-open');
   $('creditsOverlay').classList.add('show');
