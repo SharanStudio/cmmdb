@@ -38,6 +38,11 @@ main{flex:1}
 .hero h1{flex:1 1 560px;font-family:var(--display);font-weight:800;font-size:clamp(36px,5.4vw,62px);line-height:1.12;letter-spacing:-.03em}
 .hero h1 mark{background:var(--gold);color:var(--ink);padding:0 .15em;border-radius:8px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .hero-side{flex:1 1 320px;min-width:0}
+/* stacked hero: title on top, text below in the same right-hand column as the sections */
+.hero.stack{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:24px clamp(24px,5vw,64px);align-items:start}
+.hero.stack h1{grid-column:1/-1}
+.hero.stack .hero-side{grid-column:1/-1;max-width:none}
+@media(max-width:760px){.hero.stack{grid-template-columns:1fr}}
 .hero-side p{font-size:17px;line-height:1.6;color:#3b4146;margin-bottom:14px}
 .hero-side .meta{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:0}
 .hero-side .meta a{color:var(--ink);text-decoration-color:var(--gold);text-decoration-thickness:3px;text-underline-offset:3px}
